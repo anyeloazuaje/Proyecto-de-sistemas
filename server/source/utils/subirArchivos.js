@@ -10,7 +10,7 @@ const subirArchivos = multer({
   limits: 500000,
   storage: multer.diskStorage({
     destination: function (req, file, callback) {
-      callback(null, path.join(__dirname, '../public/upload/'));
+      callback(null, path.join(__dirname, '../public/'));
     },
     filename: function (req, file, callback) {
       const extension = TIPO_EXTENSIONES[file.mimetype];
@@ -25,4 +25,4 @@ const subirArchivos = multer({
     },
   }),
 });
-module.exports = { subirArchivos };
+module.exports = { subirArchivos, TIPO_EXTENSIONES };

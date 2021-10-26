@@ -39,7 +39,7 @@ const visaSchema = new Schema({
     type: String,
     required: true,
   },
-  urlPasapote: {
+  urlPasaporte: {
     type: String,
     required: true,
   },
@@ -64,6 +64,10 @@ const visaSchema = new Schema({
     required: true,
     enum: ['Pendiente', 'Aprobado', 'Rechazado'],
     default: 'Pendiente',
+  },
+  fechaCreacion: {
+    type: Date,
+    default: Date.now,
   },
 });
 

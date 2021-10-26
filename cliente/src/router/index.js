@@ -1,45 +1,69 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
-
+import VisaTurista from '../views/VisaTurista.vue';
+import VisaEmpresarial from '../views/VisaEmpresarial.vue';
+import VisaDiplomatica from '../views/VisaDiplomatica.vue';
+import Pendiente from '../views/Pendiente.vue';
+import Notificaciones from '../views/Notificaciones.vue';
+import {
+  noNecesitAutenticacion,
+  necesitaAutenticacion,
+} from '../helper/manejoAutentacion';
 Vue.use(VueRouter);
 
 const routes = [
   {
+    path: '*',
+    redirect: '/',
+  },
+  {
     path: '/',
     name: 'Home',
     component: Home,
-    beforeEnter: (to, from, next) => {
-      if (localStorage.getItem('token')) {
-        return next();
-      } else {
-        return next('/login');
-      }
-    },
+    beforeEnter: necesitaAutenticacion,
+  },
+  {
+    path: '/solicitudes-pendiente',
+    name: 'Pendiente',
+    component: Pendiente,
+    beforeEnter: necesitaAutenticacion,
+  },
+  {
+    path: '/notificaciones',
+    name: 'Notificaciones',
+    component: Notificaciones,
+    beforeEnter: necesitaAutenticacion,
+  },
+  {
+    path: '/solicitud/visa-turista',
+    name: 'VisaTurista',
+    component: VisaTurista,
+    beforeEnter: necesitaAutenticacion,
+  },
+  {
+    path: '/solicitud/visa-empresarial',
+    name: 'VisaEmpresarial',
+    component: VisaEmpresarial,
+    beforeEnter: necesitaAutenticacion,
+  },
+  {
+    path: '/solicitud/visa-diplomatica',
+    name: 'VisaDiplomatica',
+    component: VisaDiplomatica,
+    beforeEnter: necesitaAutenticacion,
   },
   {
     path: '/login',
     name: 'Login',
     component: () => import('../views/Login.vue'),
-    beforeEnter: (to, from, next) => {
-      if (localStorage.getItem('token')) {
-        return next('/');
-      } else {
-        return next();
-      }
-    },
+    beforeEnter: noNecesitAutenticacion,
   },
   {
     path: '/registro',
     name: 'Registro',
     component: () => import('../views/Registro.vue'),
-    beforeEnter: (to, from, next) => {
-      if (localStorage.getItem('token')) {
-        return next('/');
-      } else {
-        return next();
-      }
-    },
+    beforeEnter: noNecesitAutenticacion,
   },
 ];
 

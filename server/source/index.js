@@ -13,8 +13,8 @@ server.use(helmet());
 server.use(express.json());
 server.use(express.urlencoded({ extended: false }));
 server.use(cors());
-server.use(express.static(path.join(__dirname, 'public')));
 server.use('/api', require('./router/router'));
+server.use('/imagenes', express.static(path.join(__dirname, 'public')));
 
 server.listen(PUERTO, async function () {
   console.log('Servidor en linea, puerto', PUERTO);

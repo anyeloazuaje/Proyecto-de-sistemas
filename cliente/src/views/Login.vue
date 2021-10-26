@@ -5,7 +5,9 @@
         <div class="card">
           <form @submit.prevent="iniciarSesion" class="form">
             <h1>Iniciar Sesión</h1>
-            <p class="text-muted">Ingresa los datos solicitados para iniciar sesión</p>
+            <p class="text-muted">
+              Ingresa los datos solicitados para iniciar sesión
+            </p>
             <input
               v-model.trim="login.correo"
               type="email"
@@ -29,7 +31,6 @@
 
 <script>
 import Swal from "sweetalert2";
-import axios from "axios";
 export default {
   name: "Login",
   data() {
@@ -41,47 +42,36 @@ export default {
     };
   },
   methods: {
-    mostrarAlerta(tipoIcono, mensaje) {
-      const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.addEventListener("mouseenter", Swal.stopTimer);
-          toast.addEventListener("mouseleave", Swal.resumeTimer);
-        },
-      });
-      Toast.fire({
-        icon: tipoIcono,
-        title: mensaje,
-      });
-    },
     iniciarSesion() {
-      if (this.login.correo.clave < 5) {
-        return this.mostrarAlerta(
-          "error",
-          "La clave debe ser de minimo 5 caracteres",
-        );
+      if (this.login.clave < 5) {
+        return this.$store.dispatch("mostrarAlerta", {
+          icono: "error",
+          mensaje: "La clave debe ser de minimo 5 caracteres",
+        });
       }
       if (!this.login.correo || !this.login.clave) {
-        return this.mostrarAlerta(
-          "error",
-          "Todos los campos son obligatorios",
-        );
+        return this.$store.dispatch("mostrarAlerta", {
+          icono: "error",
+          mensaje: "Todos los campos son obligatorios",
+        });
       }
-      axios
-        .post("http://localhost:3000/api/login-cliente", this.login)
+      this.axios
+        .post("/login-cliente", this.login)
         .then((resp) => {
-          this.mostrarAlerta("success", `Bienvenido: ${this.login.correo}`);
+          this.$store.dispatch("mostrarAlerta", {
+            icono: "success",
+            mensaje: `Bienvenido: ${this.login.correo}`,
+          });
           localStorage.setItem("token", resp.data.token);
           window.location.href = "/";
-          this.login.correo = ""
-          this.login.clave = ""
+          this.login.correo = "";
+          this.login.clave = "";
         })
         .catch((error) => {
-          this.mostrarAlerta("error", error.response.data.msg);
+          this.$store.dispatch("mostrarAlerta", {
+            icono: "error",
+            mensaje: error.response.data.msg,
+          });
         });
     },
   },
@@ -127,7 +117,7 @@ export default {
   font-weight: 500;
 }
 
-.form input[type="text"]:focus,
+.form input[type="email"]:focus,
 .form input[type="password"]:focus {
   width: 300px;
   border-color: #2ecc71;
@@ -165,10 +155,9 @@ export default {
     margin-top: 100px;
   }
   .form input[type="email"]:focus,
-.form input[type="password"]:focus {
-  width: 210px;
-  border-color: #2ecc71;
-}
-
+  .form input[type="password"]:focus {
+    width: 210px;
+    border-color: #2ecc71;
+  }
 }
 </style>

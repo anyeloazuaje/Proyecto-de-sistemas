@@ -1,6 +1,6 @@
 const Visas = require('../models/Visas');
 const Resultados = require('../models/Resultados');
-
+const { TIPO_EXTENSIONES } = require('../utils/subirArchivos');
 module.exports = {
   crearVisaTurista: async (req, res) => {
     const {
@@ -25,28 +25,31 @@ module.exports = {
         msg: 'Todos los campos son obligatorios.',
       });
     }
-    if (!req.files.length !== 4) {
+    if (req.files.length !== 4) {
       return res.status(400).json({
         msg: 'Se necesitan todos los documentos para el registro de la visa turista',
       });
     }
-
+    const errors = [];
     req.files.forEach((file) => {
       if (!file.filename) {
-        return res.status(400).json({
-          msg: 'Todos los archivos son necesarios para el registro de la visa',
-        });
+        errors.push('filename');
       }
-      if (
-        file.mimetype !== 'image/jpeg' ||
-        file.mimetype !== 'image/png' ||
-        file.mimetype !== 'image/jpg'
-      ) {
-        return res.status(400).json({
-          msg: 'El archivo enviado deben ser en formaro: JPG, JPEG o PNG',
-        });
+      if (!TIPO_EXTENSIONES[file.mimetype]) {
+        errors.push('mimetype');
       }
     });
+    if (errors.length > 0) {
+      return res.status(400).json({
+        msg: 'El archivo enviado deben ser en formaro: JPG, JPEG o PNG',
+      });
+    }
+    const visaEncontrada = await Visas.findOne({ identificacion });
+    if (visaEncontrada) {
+      return res.status(400).json({
+        msg: 'Ya existe una solicitud de visa registrada con esta identificación',
+      });
+    }
     const [urlIdentidad, urlPasaporte, urlFondo, urlFactura] = req.files;
     try {
       const visa = new Visas({
@@ -72,7 +75,7 @@ module.exports = {
       }
     } catch (error) {
       return res.status(500).json({
-        msg: 'Error al crear la visa',
+        msg: 'Ocurrió un error creando la visa',
       });
     }
   },
@@ -99,28 +102,32 @@ module.exports = {
         msg: 'Todos los campos son obligatorios.',
       });
     }
-    if (!req.files.length !== 5) {
+    if (req.files.length !== 5) {
       return res.status(400).json({
         msg: 'Faltan documentos por subir para el registro de la visa empresarial',
       });
     }
 
+    const errors = [];
     req.files.forEach((file) => {
       if (!file.filename) {
-        return res.status(400).json({
-          msg: 'Todos los archivos son necesarios para el registro de la visa empresarial',
-        });
+        errors.push('filename');
       }
-      if (
-        file.mimetype !== 'image/jpeg' ||
-        file.mimetype !== 'image/png' ||
-        file.mimetype !== 'image/jpg'
-      ) {
-        return res.status(400).json({
-          msg: 'El archivo enviado deben ser en formaro: JPG, JPEG o PNG',
-        });
+      if (!TIPO_EXTENSIONES[file.mimetype]) {
+        errors.push('mimetype');
       }
     });
+    if (errors.length > 0) {
+      return res.status(400).json({
+        msg: 'El archivo enviado deben ser en formaro: JPG, JPEG o PNG',
+      });
+    }
+    const visaEncontrada = await Visas.findOne({ identificacion });
+    if (visaEncontrada) {
+      return res.status(400).json({
+        msg: 'Ya existe una solicitud de visa registrada con esta identificación',
+      });
+    }
     const [
       urlIdentidad,
       urlPasaporte,
@@ -180,28 +187,32 @@ module.exports = {
         msg: 'Todos los campos son obligatorios.',
       });
     }
-    if (!req.files.length !== 5) {
+
+    if (req.files.length !== 5) {
       return res.status(400).json({
         msg: 'Faltan documentos por subir para el registro de la visa diplomatica',
       });
     }
-
+    const errors = [];
     req.files.forEach((file) => {
       if (!file.filename) {
-        return res.status(400).json({
-          msg: 'Todos los archivos son necesarios para el registro de la visa diplomatica',
-        });
+        errors.push('filename');
       }
-      if (
-        file.mimetype !== 'image/jpeg' ||
-        file.mimetype !== 'image/png' ||
-        file.mimetype !== 'image/jpg'
-      ) {
-        return res.status(400).json({
-          msg: 'El archivo enviado deben ser en formaro: JPG, JPEG o PNG',
-        });
+      if (!TIPO_EXTENSIONES[file.mimetype]) {
+        errors.push('mimetype');
       }
     });
+    if (errors.length > 0) {
+      return res.status(400).json({
+        msg: 'El archivo enviado deben ser en formaro: JPG, JPEG o PNG',
+      });
+    }
+    const visaEncontrada = await Visas.findOne({ identificacion });
+    if (visaEncontrada) {
+      return res.status(400).json({
+        msg: 'Ya existe una solicitud de visa registrada con esta identificación',
+      });
+    }
     const [
       urlIdentidad,
       urlPasaporte,
@@ -330,9 +341,9 @@ module.exports = {
     try {
       const resultados = await Resultados.find({
         clienteId: req.cliente.id,
-      }).populate('visaId');
+      }).populate('visaId', 'tipoVisa');
       if (!resultados.length) {
-        return res.status(404).json({
+        return res.status(200).json({
           msg: 'No hay resultados registrados',
           notificaciones: resultados,
         });
@@ -348,21 +359,24 @@ module.exports = {
     }
   },
   definirVisa: async (req, res) => {
-    const {
-      clienteId,
-      visaId,
-      aprobado,
-      fechaCita,
-      horaCita,
-      comentario,
-      direccion,
-    } = req.body;
-    if (!clienteId || !visaId || !aprobado) {
+    const { clienteId, aprobado, fechaCita, horaCita, comentario, direccion } =
+      req.body;
+    if (!clienteId || typeof aprobado !== 'boolean') {
       return res.status(400).json({
         msg: 'Todos los campos son obligatorios para definir la solicitud de la visa',
       });
     }
     try {
+      const { visaId } = req.params;
+      const visaDefinida = await Visas.find({
+        id: visaId,
+        estado: 'Pendiente',
+      });
+      if (visaDefinida) {
+        return res.status(400).json({
+          msg: 'Esta solicitud ya ha sido definida',
+        });
+      }
       //En caso la solicitud fue rechazada, actualiza el estado de la visa a rechazado y crea el resultado para el cliente con el resultado de la visa
       if (!aprobado) {
         const visa = await Visas.findByIdAndUpdate(
@@ -381,6 +395,7 @@ module.exports = {
           clienteId,
           visaId,
           aprobado,
+          comentario,
         });
         const notificacionCreada = await notificacion.save();
         if (notificacionCreada) {
@@ -423,6 +438,48 @@ module.exports = {
     } catch (error) {
       return res.status(500).json({
         msg: 'Error al definir la solicitud de la visa',
+      });
+    }
+  },
+  visasPendientesCliente: async (req, res) => {
+    try {
+      const visas = await Visas.find({
+        estado: 'Pendiente',
+        clienteId: req.cliente.id,
+      });
+      if (!visas.length) {
+        return res.status(200).json({
+          msg: 'No hay solicitudes de visa pendientes para el cliente',
+          visasPendiente: [],
+          tieneVisasPendiente: false,
+        });
+      }
+      return res.status(200).json({
+        msg: 'Solicitudes de visa pendientes',
+        tieneVisasPendiente: true,
+        visasPendiente: visas,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        msg: 'Error al obtener las solicitudes de visa pendientes',
+      });
+    }
+  },
+  eliminarVisaCliente: async (req, res) => {
+    try {
+      const visa = await Visas.findByIdAndDelete(req.params.id);
+      if (!visa) {
+        return res.status(404).json({
+          msg: 'El id no esta corresponde a ninguna solicitud de visa',
+        });
+      }
+      return res.status(200).json({
+        msg: 'Solicitud de visa eliminada con éxito',
+        visa,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        msg: 'Error al eliminar la solicitud de visa',
       });
     }
   },

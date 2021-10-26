@@ -15,6 +15,8 @@ const {
   solicitudesVisas,
   notificacionCliente,
   definirVisa,
+  visasPendientesCliente,
+  eliminarVisaCliente,
 } = require('../controller/controller.visa');
 const {
   autenticacionCliente,
@@ -45,9 +47,15 @@ enrutador.post(
   subirArchivos.array('archivos', 5),
   crearVisaDiplomatica
 );
+enrutador.get('/visas-pendiente', autenticacionCliente, visasPendientesCliente);
 enrutador.get('/notificaciones', autenticacionCliente, notificacionCliente);
+enrutador.delete(
+  '/eliminar-visa/:id',
+  autenticacionCliente,
+  eliminarVisaCliente
+);
 enrutador.get('/solicitudes-visa', autenticacionAdmin, solicitudesVisas);
-enrutador.put('/definir-visa/:id', autenticacionAdmin, definirVisa);
+enrutador.put('/definir-visa/:visaId', autenticacionAdmin, definirVisa);
 enrutador.get(
   '/detalles-visa/:visaId',
   autenticacionAdmin,

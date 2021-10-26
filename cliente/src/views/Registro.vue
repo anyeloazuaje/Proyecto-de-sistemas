@@ -39,8 +39,7 @@
 </template>
 
 <script>
-import Swal from 'sweetalert2'
-import axios from 'axios'
+import Swal from "sweetalert2";
 export default {
   name: "Login",
   data() {
@@ -53,44 +52,37 @@ export default {
       },
     };
   },
-  methods:{
-     mostrarAlerta(tipoIcono, mensaje) {
-      const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.addEventListener("mouseenter", Swal.stopTimer);
-          toast.addEventListener("mouseleave", Swal.resumeTimer);
-        },
-      });
-      Toast.fire({
-        icon: tipoIcono,
-        title: mensaje,
-      });
+  methods: {
+    registroUsuario() {
+      if (this.registro.clave.length < 5) {
+        return this.mostrarAlerta(
+          "error",
+          "La clave debe tener al menos 5 caracteres"
+        );
+      }
+      if (
+        !this.registro.nombre ||
+        !this.registro.apellido ||
+        !this.registro.correo ||
+        !this.registro.clave
+      ) {
+        return this.mostrarAlerta("error", "Todos los campos son obligatorios");
+      }
+      this.axios
+        .post("/registro-cliente", this.registro)
+        .then((response) => {
+          if (response.status === 201) {
+            this.mostrarAlerta("success", "Registro exitoso");
+            this.$router.push("/login");
+          } else {
+            this.mostrarAlerta("error", "Error al registrar");
+          }
+        })
+        .catch((error) => {
+          this.mostrarAlerta("error", error.response.data.msg);
+        });
     },
-    registroUsuario(){
-      if(this.registro.clave.length < 5){
-        return this.mostrarAlerta('error', 'La clave debe tener al menos 5 caracteres')
-      }
-      if(!this.registro.nombre || !this.registro.apellido || !this.registro.correo || !this.registro.clave){
-        return this.mostrarAlerta('error', 'Todos los campos son obligatorios')
-      }
-      let url = "http://localhost:3000/api/registro-cliente";
-      axios.post(url, this.registro).then(response => {
-        if (response.status === 201) {
-          this.mostrarAlerta('success', 'Registro exitoso')
-          this.$router.push('/login')
-        } else {
-          this.mostrarAlerta('error', 'Error al registrar')
-        }
-      }).catch(error => {
-        this.mostrarAlerta("error", error.response.data.msg);
-      });
-    }
-  }
+  },
 };
 </script>
 .<style scoped>
@@ -172,11 +164,11 @@ export default {
     margin-top: 100px;
   }
 
-.form input[type="text"]:focus,
-.form input[type="password"]:focus ,
-.form input[type="email"]:focus {
-  width: 200px;
-  border-color: #2ecc71;
-}
+  .form input[type="text"]:focus,
+  .form input[type="password"]:focus,
+  .form input[type="email"]:focus {
+    width: 200px;
+    border-color: #2ecc71;
+  }
 }
 </style>

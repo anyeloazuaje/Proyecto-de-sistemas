@@ -4,10 +4,12 @@ const resultadoSchema = new Schema({
   clienteId: {
     type: Schema.Types.ObjectId,
     required: true,
+    ref: 'clientes',
   },
   visaId: {
     type: Schema.Types.ObjectId,
     required: true,
+    ref: 'visas',
   },
   aprobado: {
     type: Boolean,
@@ -28,6 +30,10 @@ const resultadoSchema = new Schema({
   direccion: {
     type: String,
     required: false,
+  },
+  fechaResultado: {
+    type: Date,
+    default: Date.now,
   },
 });
 
