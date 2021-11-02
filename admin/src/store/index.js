@@ -1,36 +1,35 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import { obtenerToken } from '@/helper/token.js';
-import { AUTENTICACION_TOKEN } from '@/base/main';
+import { obtenerTokenAdmin } from '@/helper/token.js';
+import { AUTENTICACION_TOKEN_ADMIN } from '@/base/main';
 import axios from 'axios';
 import router from '@/router/index';
 import Swal from 'sweetalert2';
-
+import Vue from 'vue';
+import Vuex from 'vuex';
 Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
-    cliente: {},
-    token: localStorage.getItem(AUTENTICACION_TOKEN) || '',
+    usuario: {},
+    tokenAdmin: localStorage.getItem(AUTENTICACION_TOKEN_ADMIN) || '',
     isLogged: false,
   },
   mutations: {
-    setToken(state, payload) {
-      state.token = payload;
+    setTokenAdmin(state, payload) {
+      state.tokenAdmin = payload;
     },
-    setCliente(state, payload) {
-      state.cliente = payload;
+    setUsuario(state, payload) {
+      state.usuario = payload;
     },
     setIslogged(state, payload) {
       state.isLogged = payload;
     },
     setStore(state) {
-      (state.token = null), (state.cliente = {});
+      (state.tokenAdmin = null), (state.usuario = {});
       state.isLogged = false;
     },
   },
   actions: {
     logout(context) {
-      localStorage.removeItem(AUTENTICACION_TOKEN);
+      localStorage.removeItem(AUTENTICACION_TOKEN_ADMIN);
       delete axios.defaults.headers.common['Authorization'];
       context.commit('setStore');
       router.push('/login');
@@ -52,30 +51,30 @@ export default new Vuex.Store({
         title: payload.mensaje,
       });
     },
-    establecerDatos(context, payload) {
-      const { id, nombre } = obtenerToken(payload);
-      const cliente = {
+    establecerDatosAdmin(context, payload) {
+      const { id, nombre } = obtenerTokenAdmin(payload);
+      const usuario = {
         id,
         nombre,
       };
-      localStorage.setItem(AUTENTICACION_TOKEN, payload);
+      localStorage.setItem(AUTENTICACION_TOKEN_ADMIN, payload);
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + payload;
-      context.commit('setToken', payload);
-      context.commit('setCliente', cliente);
+      context.commit('setTokenAdmin', payload);
+      context.commit('setUsuario', usuario);
       context.commit('setIslogged', true);
     },
-    getCliente(context) {
-      const token = localStorage.getItem(AUTENTICACION_TOKEN);
+    getUsuario(context) {
+      const token = localStorage.getItem(AUTENTICACION_TOKEN_ADMIN);
       if (token) {
-        return context.dispatch('establecerDatos', token);
+        return context.dispatch('establecerDatosAdmin', token);
       } else {
         context.commit('setStore');
       }
     },
   },
   getters: {
-    nombreCliente: (store) => {
-      return store.cliente.nombre;
+    nombreUsuario: (store) => {
+      return store.usuario.nombre;
     },
   },
 });

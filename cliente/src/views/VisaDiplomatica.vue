@@ -205,7 +205,7 @@
               </div>
             </div>
             <hr class="my-4" />
-            <button class="w-100 btn btn-info btn-lg" type="submit">
+            <button class="w-100 btn btn-info btn-lg text-white" type="submit">
               Enviar solicitud <i class="fas fa-paper-plane"></i>
             </button>
           </form>

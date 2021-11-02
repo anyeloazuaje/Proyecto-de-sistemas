@@ -70,7 +70,7 @@
                       </tbody>
                     </table>
                     <div v-else>
-                      <h4 class="text-center text-muted">
+                      <h4 class="text-center text-muted alert alert-info">
                         No tienes solicitudes de visa pendiente actualmente <i class="fas fa-comment-slash"></i>
                       </h4>
                     </div>

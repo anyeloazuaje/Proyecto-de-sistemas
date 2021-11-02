@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-icon-top navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar navbar-icon-top navbar-expand-lg navbar-dark background">
     <div class="container">
       <router-link class="navbar-brand capitalize" to="/"
         >Bienvenido {{ clienteNombre }}</router-link
@@ -20,7 +20,7 @@
         <ul class="navbar-nav" id="naavbar">
           <li class="nav-item active">
             <router-link class="nav-link" to="/">
-              <i class="fab fa-cc-visa"></i>
+              <i class="fas fa-home"></i>
               Inicio
               <span class="sr-only">(current)</span>
             </router-link>
@@ -67,11 +67,17 @@ export default {
 };
 </script>
 
+<style>
+.background{
+  background: #084298 !important;
+}
+</style>
 <style scoped>
 @import url("//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
 .capitalize {
   text-transform: capitalize;
 }
+
 .navbar-icon-top .navbar-nav .nav-link > .fa {
   position: relative;
   width: 36px;

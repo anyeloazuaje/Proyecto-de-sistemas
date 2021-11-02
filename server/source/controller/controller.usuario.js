@@ -14,7 +14,11 @@ module.exports = {
       }
       const claveCorrecta = await compararClave(clave, usuarioAdmin.clave);
       if (claveCorrecta) {
-        const token = crearToken({ id: usuario._id, nombre: usuario.nombre });
+        const token = crearToken({
+          id: usuarioAdmin._id,
+          nombre: usuarioAdmin.nombre,
+          admin: true,
+        });
         return res
           .status(200)
           .json({ msg: 'Usuario logueado correctamente.', token });

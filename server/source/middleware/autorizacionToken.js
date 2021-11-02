@@ -1,4 +1,5 @@
 const { obtenerToken, decodificarToken } = require('../utils/token');
+const Usuarios = require('../models/Usuario');
 const verificarToken = (req, res, next) => {
   let tokenHeader = req.headers['authorization'];
   if (!tokenHeader) {
@@ -6,7 +7,7 @@ const verificarToken = (req, res, next) => {
   }
   next();
 };
-const autenticacionAdmin = (req, res, next) => {
+const autenticacionAdmin = async (req, res, next) => {
   let tokenHeaderAdmin = req.headers['authorization'];
   if (!tokenHeaderAdmin) {
     return res.status(401).json({ msg: 'El token no ha sido proveído.' });
@@ -14,7 +15,15 @@ const autenticacionAdmin = (req, res, next) => {
   tokenHeaderAdmin = obtenerToken(tokenHeaderAdmin);
   try {
     const datosToken = decodificarToken(tokenHeaderAdmin);
-    const adminAutenticando = {};
+    if (!datosToken.admin)
+      return res.status(403).json({ msg: 'No eres administrador.' });
+    const usuarioAdmin = await Usuarios.findById(datosToken.id);
+    if (!usuarioAdmin)
+      return res.status(404).json({ msg: 'Este usuario no existe.' });
+    const adminAutenticando = {
+      id: datosToken.id,
+      nombre: datosToken.nombre,
+    };
     req.usuario = adminAutenticando;
     next();
   } catch (error) {

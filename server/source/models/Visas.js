@@ -29,6 +29,7 @@ const visaSchema = new Schema({
   clienteId: {
     type: Schema.Types.ObjectId,
     required: true,
+    ref: 'clientes',
   },
   tipoVisa: {
     type: String,
@@ -67,6 +68,7 @@ const visaSchema = new Schema({
   },
   fechaCreacion: {
     type: Date,
+    required: true,
     default: Date.now,
   },
 });

@@ -269,7 +269,9 @@ module.exports = {
   },
   solicitudesVisas: async (req, res) => {
     try {
-      const solicitudes = await Visas.find();
+      const solicitudes = await Visas.find({ estado: 'Pendiente' }).populate(
+        'clienteId'
+      );
       if (!solicitudes) {
         return res.status(404).json({
           msg: 'No hay solicitudes de visa registradas',

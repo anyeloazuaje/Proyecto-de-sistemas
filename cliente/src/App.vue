@@ -16,7 +16,12 @@
   TODO: [ x] Agregar funcionalidad y ruta para crear visa empresarial
   TODO: [x ] Agregar funcionalidad y ruta para crear visa diplomatica
   TODO: [ x] Agregar funcionalidad y ruta para notificacion
-  TODO: [ ] Agregadar validacion para evitar agregar mas solicitudes si ya existe una pendiente
+  TODO: [ X] Agregadar validacion para evitar agregar mas solicitudes si ya existe una pendiente
+  TODO: [] CAMBIAR BIENVENIDO EN HOME
+  TODO: [] Aquitar iconos de visa
+  TODO: [] Agregar otro color al navbar
+  
+
 */
 
 import Navbar from "./components/Navbar.vue";
