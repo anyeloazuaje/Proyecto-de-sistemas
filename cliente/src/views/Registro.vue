@@ -31,6 +31,7 @@
             <router-link class="text-decoration-none text-muted" to="/login"
               >¿Ya tienes cuenta? Inciar sesión</router-link
             >
+            <input type="submit" name="" value="Registro" />
           </form>
         </div>
       </div>
@@ -39,7 +40,6 @@
 </template>
 
 <script>
-import Swal from "sweetalert2";
 export default {
   name: "Login",
   data() {
@@ -55,10 +55,10 @@ export default {
   methods: {
     registroUsuario() {
       if (this.registro.clave.length < 5) {
-        return this.mostrarAlerta(
-          "error",
-          "La clave debe tener al menos 5 caracteres"
-        );
+        return this.$store.dispatch("mostrarAlerta", {
+          icono: "error",
+          mensaje: "La clave debe tener al menos 5 caracteres",
+        });
       }
       if (
         !this.registro.nombre ||
@@ -66,20 +66,32 @@ export default {
         !this.registro.correo ||
         !this.registro.clave
       ) {
-        return this.mostrarAlerta("error", "Todos los campos son obligatorios");
+        return this.$store.dispatch("mostrarAlerta", {
+          icono: "error",
+          mensaje: "Todos los campos son obligatorios",
+        });
       }
       this.axios
         .post("/registro-cliente", this.registro)
         .then((response) => {
           if (response.status === 201) {
-            this.mostrarAlerta("success", "Registro exitoso");
+            this.$store.dispatch("mostrarAlerta", {
+              icono: "success",
+              mensaje: "Registro exitoso",
+            });
             this.$router.push("/login");
           } else {
-            this.mostrarAlerta("error", "Error al registrar");
+            this.$store.dispatch("mostrarAlerta", {
+              icono: "error",
+              mensaje: "Error al registrar",
+            });
           }
         })
         .catch((error) => {
-          this.mostrarAlerta("error", error.response.data.msg);
+          this.$store.dispatch("mostrarAlerta", {
+            icono: "error",
+            mensaje: error.response.data.msg,
+          });
         });
     },
   },

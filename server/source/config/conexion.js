@@ -8,6 +8,7 @@ const conexion = async function () {
     });
     console.log('Conexion a la base de datos exitosa');
   } catch (error) {
+    console.log(error)
     console.log('Error al conectar a la base de datos');
   }
 };
