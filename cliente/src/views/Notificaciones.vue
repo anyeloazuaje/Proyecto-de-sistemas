@@ -9,7 +9,7 @@
     <hr />
     <div class="row" v-if="resultadosVisa.length">
       <div
-        class="col-6 col-md-6"
+        class="col-6 col-md-6 my-4"
         v-for="resultado in resultadosVisa"
         :key="resultado._id"
       >
@@ -29,33 +29,46 @@
                 ]"
               >
                 {{ resultado.aprobado ? "Aprobado" : "Rechazado" }}
-                  <i :class="resultado.aprobado ? 'fas fa-check' : 'fas fa-times'"></i>
+                <i
+                  :class="resultado.aprobado ? 'fas fa-check' : 'fas fa-times'"
+                ></i>
               </span>
             </p>
-             <p class="card-text">
+            <p class="card-text">
               <span class="font-weight-bold">Observación:</span>
               <strong> {{ resultado.comentario }}</strong>
             </p>
-           <div v-if="resultado.aprobado">
+            <div v-if="resultado.aprobado">
               <p class="card-text">
-              <span class="font-weight-bold">Fecha de la cita:</span>
-              <strong> {{ resultado.fechaCita }}</strong>
-            </p>
-            
-            <p class="card-text">
-              <span class="font-weight-bold">Hora de la cita:</span>
-              <strong> {{ resultado.horaCita }}</strong>
-            </p>
-            <p class="card-text my-2">
-              <span class="font-weight-bold">Dirección Google Maps:</span>
-                <a class="btn" :href="resultado.direccion" target="_blank"> <span class="badge badge-pill bg-primary">Abrir dirección <i class="fas fa-map-marker-alt"></i> </span> </a>
-            </p>
-           </div>
+                <span class="font-weight-bold">Fecha de la cita:</span>
+                <strong> {{ resultado.fechaCita }}</strong>
+              </p>
+
+              <p class="card-text">
+                <span class="font-weight-bold">Hora de la cita:</span>
+                <strong> {{ resultado.horaCita }}</strong>
+              </p>
+              <p class="card-text my-2">
+                <span class="font-weight-bold">Dirección Google Maps:</span>
+                <a class="btn" :href="resultado.direccion" target="_blank">
+                  <span class="badge badge-pill bg-primary"
+                    >Abrir dirección <i class="fas fa-map-marker-alt"></i>
+                  </span>
+                </a>
+              </p>
+            </div>
             <div class="text-center">
               <button
-                :class="
-                  resultado.aprobado ? 'btn btn-success' : 'btn btn-danger'
+                @click="
+                  $router.push({
+                    name: 'DetallesNotificacion',
+                    params: { visaId: resultado._id },
+                  })
                 "
+                :class="[
+                  resultado.aprobado ? 'btn btn-success' : 'btn btn-danger',
+                  'block',
+                ]"
               >
                 Ver detalles <i class="fas fa-arrow-right"></i>
               </button>
@@ -103,6 +116,6 @@ export default {
 
 <style>
 .font {
-  font-family: Georgia, 'Times New Roman', Times, serif
+  font-family: Georgia, "Times New Roman", Times, serif;
 }
 </style>

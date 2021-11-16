@@ -50,11 +50,27 @@
                 <p>
                   <i class="fas fa-calendar-plus"></i>
                   <strong>Fecha de solicitud:</strong>
-                  {{ detallesVisa.fechaCreacion.substring(0,10) }}
+                  {{ detallesVisa.fechaCreacion.substring(0, 10) }}
                 </p>
                 <p>
                   <i class="fas fa-clock"></i> <strong>Estado:</strong>
-                  {{ detallesVisa.estado }}
+                  <span>
+                    <span v-if="detallesVisa.estado == 'Pendiente'">
+                      <span class="badge bg-warning">{{
+                        detallesVisa.estado
+                      }}</span>
+                    </span>
+                    <span v-if="detallesVisa.estado == 'Aprobado'">
+                      <span class="badge bg-success">{{
+                        detallesVisa.estado
+                      }}</span>
+                    </span>
+                    <span v-if="detallesVisa.estado == 'Rechazado'">
+                      <span class="badge bg-danger">{{
+                        detallesVisa.estado
+                      }}</span>
+                    </span>
+                  </span>
                 </p>
               </div>
             </div>
@@ -64,7 +80,7 @@
                   Archivos adjuntos <i class="far fa-file-image"></i>
                 </h4>
                 <div class="row">
-                  <div class="col-md-4 text-center mt-2">
+                  <div class="col-md-6 mt-5 text-center mt-2">
                     <div class="card">
                       <div class="card-body">
                         <h5 class="card-title">Identificación</h5>
@@ -85,7 +101,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-4 text-center mt-2">
+                  <div class="col-md-6 mt-5 text-center mt-2">
                     <div class="card">
                       <div class="card-body">
                         <h5 class="card-title">Pasaporte</h5>
@@ -108,7 +124,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-4 text-center mt-2">
+                  <div class="col-md-6 mt-5 text-center mt-2">
                     <div class="card">
                       <div class="card-body">
                         <h5 class="card-title">
@@ -140,7 +156,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-4 text-center mt-2">
+                  <div class="col-md-6 mt-5 text-center mt-2">
                     <div class="card">
                       <div class="card-body">
                         <h5 class="card-title">
@@ -175,73 +191,84 @@
                   <template
                     v-if="detallesVisa && detallesVisa.tipoVisa === 'Negocios'"
                   >
-                    <div class="col-md-4 text-center mt-2">
-                      <div class="card">
-                        <div class="card-body">
-                          <h5 class="card-title">
-                            Carta de invitación de Empresa
-                          </h5>
-                          <p class="card-text">
-                            <a
-                              v-if="
-                                detallesVisa && detallesVisa.urlCartaEmpresarial
-                              "
-                              :href="`http://localhost:3000/imagenes/${detallesVisa.urlCartaEmpresarial}`"
-                              target="_blank"
-                            >
-                              <i class="fas fa-file-image"></i>
-                              <strong>Carta de invitación de Empresa</strong>
-                            </a>
-                            <img
-                              v-if="
-                                detallesVisa && detallesVisa.urlCartaEmpresarial
-                              "
-                              :src="`http://localhost:3000/imagenes/${detallesVisa.urlCartaEmpresarial}`"
-                              class="img-fluid mt-2"
-                              alt="Carta de invitación de Empresa"
-                            />
-                          </p>
+                    <div class="row justify-content-center my-5">
+                      <div class="col-md-6 text-center mt-2">
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">
+                              Carta de invitación de Empresa
+                            </h5>
+                            <p class="card-text">
+                              <a
+                                v-if="
+                                  detallesVisa &&
+                                  detallesVisa.urlCartaEmpresarial
+                                "
+                                :href="`http://localhost:3000/imagenes/${detallesVisa.urlCartaEmpresarial}`"
+                                target="_blank"
+                              >
+                                <i class="fas fa-file-image"></i>
+                                <strong>Carta de invitación de Empresa</strong>
+                              </a>
+                              <img
+                                v-if="
+                                  detallesVisa &&
+                                  detallesVisa.urlCartaEmpresarial
+                                "
+                                :src="`http://localhost:3000/imagenes/${detallesVisa.urlCartaEmpresarial}`"
+                                class="img-fluid mt-2"
+                                alt="Carta de invitación de Empresa"
+                              />
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </template>
                   <template
                     v-if="
-                      detallesVisa && detallesVisa.tipoVisa === 'DDiplomatica'
+                      detallesVisa && detallesVisa.tipoVisa === 'Diplomatica'
                     "
                   >
-                    <div class="col-md-4 text-center mt-2">
-                      <div class="card">
-                        <div class="card-body">
-                          <h5 class="card-title">
-                            Carta de invitación diplomatica
-                          </h5>
-                          <p class="card-text">
-                            <a
-                              v-if="
-                                detallesVisa && detallesVisa.urlCartaDiplomatica
-                              "
-                              :href="`http://localhost:3000/imagenes/${detallesVisa.urlCartaDiplomatica}`"
-                              target="_blank"
-                            >
-                              <i class="fas fa-file-image"></i>
-                              <strong>Carta de invitación diplomatica</strong>
-                            </a>
-                            <img
-                              v-if="
-                                detallesVisa && detallesVisa.urlCartaDiplomatica
-                              "
-                              :src="`http://localhost:3000/imagenes/${detallesVisa.urlCartaDiplomatica}`"
-                              class="img-fluid mt-2"
-                              alt="Carta de invitación diplomatica"
-                            />
-                          </p>
+                    <div class="row justify-content-center my-5">
+                      <div class="col-md-6 text-center mt-2">
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">
+                              Carta de invitación diplomatica
+                            </h5>
+                            <p class="card-text">
+                              <a
+                                v-if="
+                                  detallesVisa &&
+                                  detallesVisa.urlCartaDiplomatica
+                                "
+                                :href="`http://localhost:3000/imagenes/${detallesVisa.urlCartaDiplomatica}`"
+                                target="_blank"
+                              >
+                                <i class="fas fa-file-image"></i>
+                                <strong>Carta de invitación diplomatica</strong>
+                              </a>
+                              <img
+                                v-if="
+                                  detallesVisa &&
+                                  detallesVisa.urlCartaDiplomatica
+                                "
+                                :src="`http://localhost:3000/imagenes/${detallesVisa.urlCartaDiplomatica}`"
+                                class="img-fluid mt-2"
+                                alt="Carta de invitación diplomatica"
+                              />
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </template>
                 </div>
-                <div class="container mt-4">
+                <div
+                  class="container mt-4"
+                  v-if="detallesVisa.estado === 'Pendiente'"
+                >
                   <div class="text-center">
                     <h3>Definir solicitud de visa</h3>
                     <div class="container">
@@ -282,6 +309,11 @@
                                 :max="fechaMaxima"
                                 v-model="definirVisa.fechaCita"
                               />
+                              <span v-if="errorCampos.includes('fechaCita')">
+                                <span class="text-danger"
+                                  >La fecha es requerida</span
+                                >
+                              </span>
                             </div>
                           </div>
                           <div class="col-md-6">
@@ -297,6 +329,16 @@
                                 class="form-control"
                                 v-model="definirVisa.horaCita"
                               />
+                              <span v-if="errorCampos.includes('horaCita')">
+                                <span class="text-danger"
+                                  >La hora es requerida</span
+                                >
+                              </span>
+                              <span v-if="errorHora">
+                                <span class="text-danger"
+                                  >La hora estipulada no es permitida</span
+                                >
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -314,6 +356,11 @@
                                 v-model.trim="definirVisa.comentario"
                                 cols="30"
                               ></textarea>
+                              <span v-if="errorCampos.includes('comentario')">
+                                <span class="text-danger"
+                                  >El comentario es requerido</span
+                                >
+                              </span>
                             </div>
                           </div>
                           <div class="col-md-6">
@@ -327,9 +374,20 @@
                                 required
                                 placeholder="URL Google Maps"
                                 id="Direccion"
-                                v-model.trim="definirVisa.comentario"
+                                v-model.trim="definirVisa.direccion"
                                 cols="30"
                               />
+                              <span v-if="errorCampos.includes('direccion')">
+                                <span class="text-danger"
+                                  >La direccion es requerida</span
+                                >
+                              </span>
+                              <span v-if="errorUrl">
+                                <span class="text-danger"
+                                  >La direccion de Google maps no es
+                                  valida</span
+                                >
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -351,6 +409,9 @@
                                 v-model.trim="definirVisa.comentario"
                                 cols="30"
                               ></textarea>
+                              <span v-if="errorComentario" class="text-danger"
+                                >El comentario es requerido</span
+                              >
                             </div>
                           </div>
                         </div>
@@ -386,6 +447,10 @@ export default {
   data() {
     return {
       detallesVisa: {},
+      errorHora: false,
+      errorComentario: false,
+      errorUrl: false,
+      errorCampos: [],
       mostrarBotonEnviar: null,
       fechaMinima: new Date().toISOString().split("T")[0],
       fechaMaxima: null,
@@ -402,6 +467,22 @@ export default {
     this.fechaMaxima = this.sumarFecha();
   },
   methods: {
+    establecerValores() {
+      (this.detallesVisa = {}),
+        (this.errorHora = false),
+        (this.errorComentario = false),
+        (this.errorUrl = false),
+        (this.errorCampos = []),
+        (this.mostrarBotonEnviar = null),
+        (this.fechaMinima = new Date().toISOString().split("T")[0]),
+        (this.fechaMaxima = null),
+        (this.definirVisa = {
+          aprobado: "",
+          clienteId: "",
+          comentario: "",
+          direccion: null,
+        });
+    },
     establecerValorVisa(valor) {
       this.definirVisa.aprobado = valor;
     },
@@ -410,22 +491,108 @@ export default {
       fecha.setDate(fecha.getDate() + 15);
       return new Date(fecha).toISOString().split("T")[0];
     },
-    async definirSolicitudVisa() {
+    async enviarSolicitud() {
+      this.errorCampos = [];
+      this.errorHora = false;
+      this.errorUrl = false;
+      this.errorComentario = false;
+      if (this.definirVisa.aprobado === false && !this.definirVisa.comentario) {
+        this.errorComentario = true;
+        this.$store.dispatch("mostrarAlerta", {
+          icono: "error",
+          mensaje: "Debe escribir un comentario",
+        });
+        return;
+      }
+      if (
+        this.definirVisa.aprobado &&
+        !this.definirVisa.fechaCita &&
+        !this.errorCampos.includes("fechaCita")
+      ) {
+        this.errorCampos.push("fechaCita");
+      }
+      if (
+        this.definirVisa.aprobado &&
+        !this.definirVisa.horaCita &&
+        !this.errorCampos.includes("horaCita")
+      ) {
+        this.errorCampos.push("horaCita");
+      }
+      if (
+        this.definirVisa.aprobado &&
+        !this.definirVisa.comentario &&
+        !this.errorCampos.includes("comentario")
+      ) {
+        this.errorCampos.push("comentario");
+      }
+      if (
+        this.definirVisa.aprobado &&
+        !this.definirVisa.direccion &&
+        !this.errorCampos.includes("direccion")
+      ) {
+        this.errorCampos.push("direccion");
+      }
+      if (this.definirVisa.aprobado === true) {
+        if (
+          !this.definirVisa.direccion ||
+          !this.definirVisa.comentario ||
+          !this.definirVisa.fechaCita ||
+          !this.definirVisa.horaCita
+        ) {
+          this.$store.dispatch("mostrarAlerta", {
+            icono: "error",
+            mensaje: "Debe completar todos los campos",
+          });
+          return;
+        }
+      }
+      let horaSeleccionada;
+      if (this.definirVisa.aprobado === true) {
+        horaSeleccionada = Number(this.definirVisa.horaCita.substr(0, 2));
+      }
+      if (
+        (this.definirVisa.aprobado && horaSeleccionada < 9) ||
+        horaSeleccionada > 17
+      ) {
+        this.errorHora = true;
+        this.$store.dispatch("mostrarAlerta", {
+          icono: "error",
+          mensaje: "La hora de la cita debes ser entre 9:00 a 17:00",
+        });
+        return;
+      }
+      let validarURL = /^(ftp|http|https):\/\/[^ "]+$/;
+      if (this.definirVisa.aprobado === true) {
+        if (
+          !validarURL.test(this.definirVisa.direccion) ||
+          !this.definirVisa.direccion.includes("maps")
+        ) {
+          this.errorUrl = true;
+          this.$store.dispatch("mostrarAlerta", {
+            icono: "error",
+            mensaje: "La dirección de google maps no es compatible",
+          });
+          return;
+        }
+      }
+      this.definirVisa.clienteId = this.detallesVisa.clienteId;
       try {
-        this.definirVisa.clienteId = this.detallesVisa.clienteId;
+        const { data } = await this.axios.put(
+          `definir-visa/${this.$route.params.visaId} `,
+          this.definirVisa
+        );
+        this.$store.dispatch("mostrarAlerta", {
+          icono: "success",
+          mensaje: data.msg,
+        });
+        this.establecerValores();
+        this.$router.push("/");
       } catch (error) {
         this.$store.dispatch("mostrarAlerta", {
           icono: "error",
-          mensaje: "Ocurrió un error definiendo la solicitud " + error.message,
+          mensaje: "Error al enviar la solicitud",
         });
       }
-    },
-    async enviarSolicitud() {
-      const valor = this.definirVisa.aprobado ? "aprobada" : "rechazada";
-      this.$store.dispatch("mostrarAlerta", {
-        icono: "success",
-        mensaje: `Solicitud de visa ${valor} con éxito`,
-      });
     },
     async detallesSolicitud() {
       try {

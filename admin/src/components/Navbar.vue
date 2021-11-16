@@ -3,9 +3,9 @@
     <div class="px-3 py-2 background text-white">
       <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-          <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
-          Bienvenido {{$store.getters.nombreUsuario }}  <span class="m-1">  <i class="fas fa-user-shield"></i></span>
-          </a>
+          <router-link to="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
+             <span class="text-capitalize ml-2"> Bienvenido {{$store.getters.nombreUsuario }} </span> <span class="m-1">  <i class="fas fa-user-shield"></i></span>
+          </router-link>
 
           <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
             <li>
@@ -16,6 +16,11 @@
             <li>
               <router-link to="/usuarios" class="nav-link text-white">
                 Usuarios <i class="fas fa-user"></i>
+              </router-link>
+            </li>
+            <li>
+              <router-link to="/visas" class="nav-link text-white">
+                Visas <i class="fas fa-passport"></i>
               </router-link>
             </li>
             <li>

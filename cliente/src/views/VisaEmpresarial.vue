@@ -2,12 +2,21 @@
   <div class="container">
     <main>
       <div class="py-3 text-center">
-        <h2 class="text-center my-5">Solicitud de Visa  Empresarial</h2>
+        <h2 class="text-center my-5">Solicitud de Visa Empresarial</h2>
         <p class="text-muted">
-          Completas los datos para la solicitud de Visa Empresarial. El orden de los
-          archivos adjuantar son los indicados. La respuesta de la solicitud la
-          recibiras en un lapso de 24 a 48 horas en días habiles.
+          Completas los datos para la solicitud de Visa Empresarial. El orden de
+          los archivos adjuantar son los indicados. La respuesta de la solicitud
+          la recibiras en un lapso de 24 a 48 horas en días habiles.
         </p>
+      </div>
+      <div class="row mt-5">
+        <div class="col-md-12 text-center" v-if="erroresFormulario.length">
+          <div class="container alert alert-danger">
+            <AlertaErrores
+              :erroresFormulario="erroresFormulario"
+            ></AlertaErrores>
+          </div>
+        </div>
       </div>
       <div class="row g-5">
         <div class="col-md-5 col-lg-4 order-md-last">
@@ -41,14 +50,16 @@
             <li class="list-group-item d-flex justify-content-between bg-light">
               <div>
                 <h6 class="my-0">Carta de invitación de Empresa</h6>
-                <small class="text-muted">Donde certifique que trabajare en el país</small>
+                <small class="text-muted"
+                  >Donde certifique que trabajare en el país</small
+                >
               </div>
             </li>
           </ul>
         </div>
         <div class="col-md-7 col-lg-8">
           <h4 class="mb-3">Datos personales</h4>
-          <form @submit.prevent="enviarSolicitud">
+          <form >
             <div class="row g-3">
               <div class="col-sm-6">
                 <label for="nombre" class="form-label">Nombre</label>
@@ -60,6 +71,12 @@
                   required
                   v-model.trim="visaEmpresarial.nombre"
                 />
+                 <span v-if="errores">
+                    <small class="text-danger">El nombre es requerido</small>
+                </span>
+                <span v-if="correcto">
+                    <small class="text-success">El nombre es correcto</small>
+                </span>
               </div>
 
               <div class="col-sm-6">
@@ -72,6 +89,12 @@
                   required
                   v-model.trim="visaEmpresarial.apellido"
                 />
+                <span v-if="errores">
+                    <small class="text-danger">El apellido es requerido</small>
+                </span>
+                 <span v-if="correcto">
+                    <small class="text-success">El apellido es correcto</small>
+                </span>
               </div>
               <div class="col-sm-6">
                 <label for="identificacion" class="form-label"
@@ -86,6 +109,15 @@
                   required
                   v-model.number="visaEmpresarial.identificacion"
                 />
+                  <span v-if="errores">
+                    <small class="text-danger">La identificación es requerida</small>
+                </span>
+                <span v-if="errorIdentificacion">
+                    <small class="text-danger">La identificación es requerida</small>
+                </span>
+                <span v-if="correcto && !errorIdentificacion">
+                    <small class="text-success">Identificación correcta</small>
+                </span>
               </div>
 
               <div class="col-sm-6">
@@ -100,6 +132,12 @@
                   <option value="Masculino">Masculino</option>
                   <option value="Femenino">Femenino</option>
                 </select>
+                <span v-if="errores">
+                    <small class="text-danger">El sexo es requerido</small>
+                </span>
+                <span v-if="correcto">
+                    <small class="text-success">Campo sexo correcto</small>
+                </span>
               </div>
               <div class="col-sm-6">
                 <label for="edad" class="form-label">Edad</label>
@@ -113,6 +151,15 @@
                   required
                   v-model.number="visaEmpresarial.edad"
                 />
+                <span v-if="errores">
+                    <small class="text-danger">La edad es necesaria</small>
+                </span>
+                <span v-if="errorEdad">
+                    <small class="text-danger">La edad debe ser entre 10 y 100 años</small>
+                </span>
+                <span v-if="correcto && !errorEdad">
+                    <small class="text-success">Campo correcto</small>
+                </span>
               </div>
 
               <div class="col-sm-6">
@@ -127,6 +174,12 @@
                   required
                   v-model="visaEmpresarial.fecha_nacimiento"
                 />
+                 <span v-if="errores">
+                    <small class="text-danger">La fecha de nacimiento es requerida</small>
+                </span>
+                <span v-if="correcto">
+                    <small class="text-success">La fecha de nacimiento es correcta</small>
+                </span>
               </div>
               <h4>Archivos adjuntar</h4>
               <div class="col-12">
@@ -143,6 +196,12 @@
                     :ref="1"
                     required
                   />
+                  <span v-if="errores">
+                    <small class="text-danger">La imagen de identidad es requerida</small>
+                  </span>
+                  <span v-if="!errores && correcto">
+                    <small class="text-success">La imagen de identidad es correcta</small>
+                  </span>
                 </div>
               </div>
               <div class="col-12">
@@ -158,7 +217,14 @@
                   required
                   @change="obtenerImagen(2)"
                 />
+                  <span v-if="errores">
+                    <small class="text-danger">La imagen de identidad es requerida</small>
+                  </span>
+                  <span v-if="!errores && correcto">
+                    <small class="text-success">La imagen de identidad es correcta</small>
+                  </span>
               </div>
+
               <div class="col-12">
                 <label for="factura-pago" class="form-label"
                   >Factura de pago
@@ -175,11 +241,19 @@
                   @change="obtenerImagen(3)"
                   required
                 />
+                  <span v-if="errores">
+                    <small class="text-danger">La imagen de factura de pago es requerida</small>
+                  </span>
+                  <span v-if="!errores && correcto">
+                    <small class="text-success">La imagen de factura de pago es correcta</small>
+                  </span>
               </div>
               <div class="col-12">
                 <label for="factura-medico" class="form-label"
                   >Factura seguro médico
-                  <span class="text-muted">(Con un monto de 1000 €)</span></label
+                  <span class="text-muted"
+                    >(Con un monto de 1000 €)</span
+                  ></label
                 >
                 <input
                   type="file"
@@ -190,11 +264,20 @@
                   @change="obtenerImagen(4)"
                   required
                 />
+                  <span v-if="errores">
+                    <small class="text-danger">La imagen de factura de seguro médico es requerida</small>
+                  </span>
+                  <span v-if="!errores && correcto">
+                    <small class="text-success">La imagen de factura de seguro médico es correcta</small>
+                  </span>
               </div>
               <div class="col-12">
                 <label for="carta-empresarial" class="form-label"
-                  >Carta de invitación de Empresa 
-                    <span class="text-muted">(En la que trabajara en el país)</span></label>
+                  >Carta de invitación de Empresa
+                  <span class="text-muted"
+                    >(En la que trabajara en el país)</span
+                  ></label
+                >
                 <input
                   type="file"
                   accept="image/png, image/jpg, image/jpeg"
@@ -204,31 +287,45 @@
                   @change="obtenerImagen(5)"
                   required
                 />
+                  <span v-if="errores">
+                    <small class="text-danger">La carta empresarial es requerida</small>
+                  </span>
+                  <span v-if="!errores && correcto">
+                    <small class="text-success">La carta empresarial es correcta</small>
+                  </span>
               </div>
             </div>
             <hr class="my-4" />
-            <button class="w-100 btn bg-empresarial text-white btn-lg" type="submit">
+            <button
+            @click="enviarSolicitud"
+              class="w-100 btn bg-empresarial text-white btn-lg"
+            >
               Enviar solicitud <i class="fas fa-paper-plane"></i>
             </button>
           </form>
         </div>
       </div>
     </main>
-    <Footer
-        titulo="Solicitud de Visa Empresarial"
-       />
+    <Footer titulo="Solicitud de Visa Empresarial" />
   </div>
 </template>
 
 <script>
-import Footer from '../components/Footer'
+import Footer from "../components/Footer";
+import AlertaErrores from "../components/AlertaErrores.vue";
 export default {
   name: "VisaEmpresarial",
-  components:{
-      Footer
+  components: {
+    Footer,
+    AlertaErrores
   },
   data() {
     return {
+      errores: false,
+      correcto:false,
+      errorIdentificacion:false,
+      errorEdad:false,
+      erroresFormulario: [],
       visaEmpresarial: {
         nombre: "",
         apellido: "",
@@ -257,6 +354,28 @@ export default {
         });
     },
     async enviarSolicitud() {
+      this.erroresFormulario = []
+      if(this.visaEmpresarial.nombre == "" || !this.visaEmpresarial.nombre && !this.erroresFormulario.includes("nombre")){
+        this.erroresFormulario.push("El nombre es requerido");
+      }
+      if(this.visaEmpresarial.apellido == "" || !this.visaEmpresarial.apellido && !this.erroresFormulario.includes("apellido")){
+        this.erroresFormulario.push("El apellido es requerido");
+      }
+      if(this.visaEmpresarial.identificacion == "" || !this.visaEmpresarial.identificacion && !this.erroresFormulario.includes("identificacion")){
+        this.erroresFormulario.push("La identificación es requerida");
+      }
+      if(this.visaEmpresarial.sexo == "" || !this.visaEmpresarial.sexo && !this.erroresFormulario.includes("sexo")){
+        this.erroresFormulario.push("El sexo es requerido");
+      }
+      if(this.visaEmpresarial.edad == "" || !this.visaEmpresarial.edad && !this.erroresFormulario.includes("edad")){
+        this.erroresFormulario.push("La edad es requerida");
+      }
+      if(this.visaEmpresarial.fecha_nacimiento == "" || !this.visaEmpresarial.fecha_nacimiento  && !this.erroresFormulario.includes("fecha")){
+        this.erroresFormulario.push("La fecha de nacimiento es requerida");
+      }
+      if(this.visaEmpresarial.archivos.length < 5 && !this.erroresFormulario.includes("imagenes")){
+        this.erroresFormulario.push("Las imagenes adjuntar son requeridas");
+      }
       if (
         this.visaEmpresarial.nombre == "" ||
         this.visaEmpresarial.apellido == "" ||
@@ -268,26 +387,33 @@ export default {
       ) {
         this.$store.dispatch("mostrarAlerta", {
           icono: "error",
-          mensaje: "Todos los campos son obligatorios, verifique e intente nuevamente",
+          mensaje:
+            "Todos los campos son obligatorios, verifique e intente nuevamente",
         });
+        this.errores = true
         return;
       }
+      this.errores = false;
       let identficacion = this.visaEmpresarial.identificacion;
       identficacion = identficacion.toString();
       if (identficacion.length != 8) {
+        this.errorIdentificacion = true;
         this.$store.dispatch("mostrarAlerta", {
           icono: "error",
           mensaje: "La identificación debe tener 8 dígitos.",
         });
         return;
       }
+      this.errorIdentificacion = false;
       if (this.visaEmpresarial.edad < 10 || this.visaEmpresarial.edad > 100) {
+        this.errorEdad = true;
         this.$store.dispatch("mostrarAlerta", {
           icono: "error",
           mensaje: "La edad debe estar entre 10 y 100 años.",
         });
         return;
       }
+      this.errorEdad = false;
       if (this.visaEmpresarial.fecha_nacimiento > "2010-01-31") {
         this.$store.dispatch("mostrarAlerta", {
           icono: "error",
@@ -295,13 +421,16 @@ export default {
         });
         return;
       }
-      const visasPendientes = await this.axios.get("/visas-pendiente");
-      if (visasPendientes.tieneVisasPendiente) {
+      if(!this.errores && !this.errorEdad && !this.errorIdentificacion){
+        this.correcto = true;
+      }
+      const {data} = await this.axios.get("/verificar-creacion-visas");
+      if (data.tieneVisasPendiente) {
         this.$store.dispatch("mostrarAlerta", {
           icono: "error",
           mensaje: "Ya tienes solicitud pendiente.",
         });
-        this.visaTurista = {
+        this.visaEmpresarial = {
           nombre: "",
           apellido: "",
           identificacion: "",
@@ -312,15 +441,18 @@ export default {
           archivos: [],
         };
         this.imagenes = {};
-         setTimeout(() => {
-        this.$router.push("/solicitudes-pendiente");
+        setTimeout(() => {
+          this.$router.push("/solicitudes-pendiente");
         }, 2000);
         return;
       }
       const bodyFormData = new FormData();
       bodyFormData.append("nombre", this.visaEmpresarial.nombre);
       bodyFormData.append("apellido", this.visaEmpresarial.apellido);
-      bodyFormData.append("identificacion", this.visaEmpresarial.identificacion);
+      bodyFormData.append(
+        "identificacion",
+        this.visaEmpresarial.identificacion
+      );
       bodyFormData.append("sexo", this.visaEmpresarial.sexo);
       bodyFormData.append("edad", this.visaEmpresarial.edad);
       bodyFormData.append(
@@ -344,17 +476,17 @@ export default {
             icono: "success",
             mensaje: "Solicitud para Visa Emprerial creada correctamente.",
           });
-           this.visaTurista = {
-          nombre: "",
-          apellido: "",
-          identificacion: "",
-          sexo: "",
-          edad: "",
-          fecha_nacimiento: "",
-          tipoVisa: "Turista",
-          archivos: [],
-        };
-        this.imagenes = {};
+          this.visaEmpresarial = {
+            nombre: "",
+            apellido: "",
+            identificacion: "",
+            sexo: "",
+            edad: "",
+            fecha_nacimiento: "",
+            tipoVisa: "Turista",
+            archivos: [],
+          };
+          this.imagenes = {};
           setTimeout(() => {
             this.$router.push("/");
           }, 2000);
@@ -370,7 +502,7 @@ export default {
 };
 </script>
 <style>
-.text-empresarial{
-  color:#2778c4
+.text-empresarial {
+  color: #2778c4;
 }
 </style>

@@ -287,6 +287,28 @@ module.exports = {
       });
     }
   },
+  solicitudesVisasDefinidas: async (req, res) => {
+    try {
+      const solicitudes = await Visas.find({
+        estado: {
+          $ne: 'Pendiente',
+        },
+      }).populate('clienteId');
+      if (!solicitudes) {
+        return res.status(404).json({
+          msg: 'No hay solicitudes de visa registradas',
+        });
+      }
+      return res.status(200).json({
+        msg: 'Solicitudes de visa',
+        solicitudes,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        msg: 'Error al obtener las solicitudes de visa',
+      });
+    }
+  },
   actualizarSolicitudVisa: async (req, res) => {
     const {
       nombre,
@@ -374,9 +396,9 @@ module.exports = {
         id: visaId,
         estado: 'Pendiente',
       });
-      if (visaDefinida) {
-        return res.status(400).json({
-          msg: 'Esta solicitud ya ha sido definida',
+      if (!visaDefinida) {
+        return res.status(200).json({
+          msg: 'Esta solicitud no existe',
         });
       }
       //En caso la solicitud fue rechazada, actualiza el estado de la visa a rechazado y crea el resultado para el cliente con el resultado de la visa
@@ -449,18 +471,44 @@ module.exports = {
         estado: 'Pendiente',
         clienteId: req.cliente.id,
       });
-      if (!visas.length) {
+      if (visas.length) {
+        return res.status(200).json({
+          msg: 'Solicitudes de visa pendientes',
+          tieneVisasPendiente: true,
+          visasPendiente: visas,
+        });
+      } else {
         return res.status(200).json({
           msg: 'No hay solicitudes de visa pendientes para el cliente',
           visasPendiente: [],
           tieneVisasPendiente: false,
         });
       }
-      return res.status(200).json({
-        msg: 'Solicitudes de visa pendientes',
-        tieneVisasPendiente: true,
-        visasPendiente: visas,
+    } catch (error) {
+      return res.status(500).json({
+        msg: 'Error al obtener las solicitudes de visa pendientes',
       });
+    }
+  },
+  visaPuedeCrearSolicitud: async (req, res) => {
+    try {
+      const visas = await Visas.find({
+        estado: 'Pendiente',
+        clienteId: req.cliente.id,
+      });
+      if (visas.length >= 3) {
+        return res.status(200).json({
+          msg: 'Solicitudes de visa pendientes',
+          tieneVisasPendiente: true,
+          visasPendiente: visas,
+        });
+      } else {
+        return res.status(200).json({
+          msg: 'No hay solicitudes de visa pendientes para el cliente',
+          visasPendiente: [],
+          tieneVisasPendiente: false,
+        });
+      }
     } catch (error) {
       return res.status(500).json({
         msg: 'Error al obtener las solicitudes de visa pendientes',
@@ -482,6 +530,26 @@ module.exports = {
     } catch (error) {
       return res.status(500).json({
         msg: 'Error al eliminar la solicitud de visa',
+      });
+    }
+  },
+  detallesNotificacion: async (req, res) => {
+    try {
+      const notificacion = await Resultados.findById(req.params.notificacionId)
+        .populate('clienteId')
+        .populate('visaId');
+      if (!notificacion) {
+        return res.status(200).json({
+          msg: 'El id no esta corresponde a ninguna notificación',
+        });
+      }
+      return res.status(200).json({
+        msg: 'Detalles de la notificación',
+        notificacion,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        msg: 'Error al obtener la notificacion',
       });
     }
   },

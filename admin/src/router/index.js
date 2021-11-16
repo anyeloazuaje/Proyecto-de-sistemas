@@ -2,8 +2,10 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
 import Login from '../views/Login.vue';
+import Visas from '../views/Visas.vue';
 import Usuarios from '../views/Usuarios.vue';
 import SolicitudId from '../views/SolicitudId.vue';
+import AgregarUsuarios from '../views/AgregarUsuarios.vue';
 import {
   necesitaAutenticacion,
   noNecesitAutenticacion,
@@ -18,9 +20,25 @@ const routes = [
     beforeEnter: necesitaAutenticacion,
   },
   {
+    path: '*',
+    redirect: '/',
+  },
+  {
     path: '/usuarios',
     name: 'Usuarios',
     component: Usuarios,
+    beforeEnter: necesitaAutenticacion,
+  },
+  {
+    path: '/visas',
+    name: 'visas',
+    component: Visas,
+    beforeEnter: necesitaAutenticacion,
+  },
+  {
+    path: '/agregar-usuarios',
+    name: 'AgregarUsuarios',
+    component: AgregarUsuarios,
     beforeEnter: necesitaAutenticacion,
   },
   {

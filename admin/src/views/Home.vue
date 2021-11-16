@@ -1,12 +1,9 @@
 <template>
   <div class="container">
     <div class="row mt-5">
-      <div v-if="solicitudesPendientes.length">
-        <div
-          v-for="solicitudes in solicitudesPendientes"
-          :key="solicitudes._id"
-        >
-          <div class="col-md-6 my-2">
+      <template v-if="solicitudesPendientes.length">
+        <template v-for="solicitudes in solicitudesPendientes">
+          <div class="col-md-6 my-2" :key="solicitudes._id">
             <div class="card">
               <div class="card-header text-capitalize">
                 <h4>
@@ -14,17 +11,20 @@
                   Visa {{ solicitudes.tipoVisa }}
                 </h4>
               </div>
-              <div class="card-body">
+              <div class="card-body text-center">
                 <p class="text-capitalize">
                   <i class="fas fa-user"></i> Cliente:
                   <b>{{ solicitudes.clienteId.nombre }} </b>
                 </p>
                 <p>
-                  <i class="fas fa-calendar-alt"></i> Fecha:
-                  <b>{{ new Date(solicitudes.fechaCreacion).toLocaleDateString() }}</b>
+                  <i class="fas fa-calendar-alt"></i> Fecha de la solicitud:
+                  <b>{{
+                    new Date(solicitudes.fechaCreacion).toLocaleDateString()
+                  }}</b>
                 </p>
                 <div class="text-center">
                   <a
+                    style="display: block"
                     class="btn btn-primary background"
                     @click="$router.push(`/detallesVisa/${solicitudes._id}`)"
                   >
@@ -34,8 +34,8 @@
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </template>
+      </template>
       <div v-else>
         <div class="alert alert-info text-center">
           <h4>

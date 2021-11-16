@@ -1,0 +1,9 @@
+__v,_id,aprobado,clienteId,comentario,direccion,fechaCita,fechaResultado,horaCita,visaId
+0,61747d9822af8472ecd00bc4,true,616da6de42ae1fdfe7eb9eb0,Llegar antes de las 20,https://goo.gl/maps/2NnhFDeJiceiZgfK8,2021-12-10,,20:00,61747179f4bbf0ee83b853a8
+0,61748a23afbe961c5eb2ca5b,false,616da6de42ae1fdfe7eb9eb0,No tienes los fondo suficientes para la visa solicitada,,,2021-10-23T22:18:11.330Z,,6174892cd955b635d2ec7dec
+0,61855c62fb4b76daeb52b7e7,true,616da6de42ae1fdfe7eb9eb0,Cumple con todos los requisitos,https://goo.gl/maps/eBxUVJCbhDtbfTG27,2021-11-11,2021-11-05T16:31:30.461Z,15:31,61853acd3378f6802f9126c3
+0,618560ac34e339446d65b29b,false,616da6de42ae1fdfe7eb9eb0,No cumple con los requisitos,,,2021-11-05T16:49:48.227Z,,61852f3a00a1401f9157d9af
+0,6185a8034cadfb8214f07288,true,616da6de42ae1fdfe7eb9eb0,Visa aprobada correctamente,https://goo.gl/maps/eBxUVJCbhDtbfTG27,2021-11-16,2021-11-05T21:54:11.568Z,15:53,61852fcc463954e6432011b1
+0,6189f436f7ab3369571c71d9,true,616da6de42ae1fdfe7eb9eb0,Traer dinero para las copias,https://goo.gl/maps/eBxUVJCbhDtbfTG27,2021-11-24,2021-11-09T04:08:22.387Z,14:07,6189f361f7ab3369571c71ca
+0,61901ce4454b9ae1a2da8dc1,true,616da6de42ae1fdfe7eb9eb0,Favor traer documentos de identidad escaneados a color,https://goo.gl/maps/eBxUVJCbhDtbfTG27,2021-11-25,2021-11-13T20:15:32.489Z,09:26,61901bdf454b9ae1a2da8dae
+0,61902288454b9ae1a2da8e2a,false,616da6de42ae1fdfe7eb9eb0,No cumples con la edad estipulada,,,2021-11-13T20:39:36.206Z,,61902252454b9ae1a2da8e20

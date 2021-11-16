@@ -58,4 +58,23 @@ module.exports = {
       res.status(500).json({ msg: 'Ocurrió un error registrando el usuario.' });
     }
   },
+  obtenerUsuarios: async (req, res) => {
+    try {
+      const usuarios = await Usuario.find();
+      if (!usuarios.length) {
+        return res.status(200).json({
+          msg: 'No existen usuarios',
+          usuarios: [],
+        });
+      }
+      return res.status(200).json({
+        msg: 'Usuarios obtenidos correctamente',
+        usuarios,
+      });
+    } catch (error) {
+      res.status(500).json({
+        msg: 'Ocurrió un error obteniendo los usuarios ' + error.message,
+      });
+    }
+  },
 };

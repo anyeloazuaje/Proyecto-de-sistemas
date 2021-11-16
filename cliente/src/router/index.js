@@ -6,6 +6,7 @@ import VisaEmpresarial from '../views/VisaEmpresarial.vue';
 import VisaDiplomatica from '../views/VisaDiplomatica.vue';
 import Pendiente from '../views/Pendiente.vue';
 import Notificaciones from '../views/Notificaciones.vue';
+import DetallesNotificacion from '../views/DetallesNotificacion.vue';
 import {
   noNecesitAutenticacion,
   necesitaAutenticacion,
@@ -51,6 +52,12 @@ const routes = [
     path: '/solicitud/visa-diplomatica',
     name: 'VisaDiplomatica',
     component: VisaDiplomatica,
+    beforeEnter: necesitaAutenticacion,
+  },
+  {
+    path: '/visa-notificacion/:visaId',
+    name: 'DetallesNotificacion',
+    component: DetallesNotificacion,
     beforeEnter: necesitaAutenticacion,
   },
   {

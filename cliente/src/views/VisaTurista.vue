@@ -9,6 +9,15 @@
           recibiras en un lapso de 24 a 48 horas en días habiles.
         </p>
       </div>
+      <div class="row my-3 justify-content-center">
+        <div class="col-md-6 text-center" v-if="erroresFormulario.length">
+          <div class="container alert alert-danger">
+            <AlertaErrores
+              :erroresFormulario="erroresFormulario"
+            ></AlertaErrores>
+          </div>
+        </div>
+      </div>
       <div class="row g-5">
         <div class="col-md-5 col-lg-4 order-md-last">
           <h4 class="d-flex justify-content-between align-items-center mb-3">
@@ -42,7 +51,7 @@
         </div>
         <div class="col-md-7 col-lg-8">
           <h4 class="mb-3">Datos personales</h4>
-          <form @submit.prevent="enviarSolicitud">
+          <form>
             <div class="row g-3">
               <div class="col-sm-6">
                 <label for="nombre" class="form-label">Nombre</label>
@@ -54,6 +63,12 @@
                   required
                   v-model.trim="visaTurista.nombre"
                 />
+                <span v-if="errores">
+                  <small class="text-danger">El nombre es requerido</small>
+                </span>
+                <span v-if="correcto">
+                  <small class="text-success">El nombre es correcto</small>
+                </span>
               </div>
 
               <div class="col-sm-6">
@@ -66,6 +81,12 @@
                   required
                   v-model.trim="visaTurista.apellido"
                 />
+                <span v-if="errores">
+                  <small class="text-danger">El apellido es requerido</small>
+                </span>
+                <span v-if="correcto">
+                  <small class="text-success">El apellido es correcto</small>
+                </span>
               </div>
               <div class="col-sm-6">
                 <label for="identificacion" class="form-label"
@@ -80,6 +101,19 @@
                   required
                   v-model.number="visaTurista.identificacion"
                 />
+                <span v-if="errores">
+                  <small class="text-danger"
+                    >La identificación es requerida</small
+                  >
+                </span>
+                <span v-if="errorIdentificacion">
+                  <small class="text-danger"
+                    >La identificación es requerida</small
+                  >
+                </span>
+                <span v-if="correcto && !errorIdentificacion">
+                  <small class="text-success">Identificación correcta</small>
+                </span>
               </div>
 
               <div class="col-sm-6">
@@ -94,6 +128,12 @@
                   <option value="Masculino">Masculino</option>
                   <option value="Femenino">Femenino</option>
                 </select>
+                <span v-if="errores">
+                  <small class="text-danger">El sexo es requerido</small>
+                </span>
+                <span v-if="correcto">
+                  <small class="text-success">Campo sexo correcto</small>
+                </span>
               </div>
               <div class="col-sm-6">
                 <label for="edad" class="form-label">Edad</label>
@@ -107,6 +147,17 @@
                   required
                   v-model.number="visaTurista.edad"
                 />
+                <span v-if="errores">
+                  <small class="text-danger">La edad es necesaria</small>
+                </span>
+                <span v-if="errorEdad">
+                  <small class="text-danger"
+                    >La edad debe ser entre 10 y 100 años</small
+                  >
+                </span>
+                <span v-if="correcto && !errorEdad">
+                  <small class="text-success">Campo correcto</small>
+                </span>
               </div>
 
               <div class="col-sm-6">
@@ -121,6 +172,16 @@
                   required
                   v-model="visaTurista.fecha_nacimiento"
                 />
+                <span v-if="errores">
+                  <small class="text-danger"
+                    >La fecha de nacimiento es requerida</small
+                  >
+                </span>
+                <span v-if="correcto">
+                  <small class="text-success"
+                    >La fecha de nacimiento es correcta</small
+                  >
+                </span>
               </div>
               <h4>Archivos adjuntar</h4>
               <div class="col-12">
@@ -137,6 +198,16 @@
                     :ref="1"
                     required
                   />
+                  <span v-if="errores">
+                    <small class="text-danger"
+                      >La imagen de identidad es requerida</small
+                    >
+                  </span>
+                  <span v-if="!errores && correcto">
+                    <small class="text-success"
+                      >La imagen de identidad es correcta</small
+                    >
+                  </span>
                 </div>
               </div>
               <div class="col-12">
@@ -152,42 +223,79 @@
                   required
                   @change="obtenerImagen(2)"
                 />
-              </div>
-              <div class="col-12">
-                <label for="factura-pago" class="form-label"
-                  >Factura de pago
-                  <small class="text-muted"
-                    >(Con un mínimo de 2000 €)</small
-                  ></label
-                >
-                <input
-                  type="file"
-                  accept="image/png, image/jpg, image/jpeg"
-                  class="form-control"
-                  :ref="3"
-                  id="factura-pago"
-                  @change="obtenerImagen(3)"
-                  required
-                />
-              </div>
-              <div class="col-12">
-                <label for="factura-medico" class="form-label"
-                  >Factura seguro médico
-                  <span class="text-muted">(Con un monto de 500 €)</span></label
-                >
-                <input
-                  type="file"
-                  accept="image/png, image/jpg, image/jpeg"
-                  class="form-control"
-                  id="factura-medico"
-                  :ref="4"
-                  @change="obtenerImagen(4)"
-                  required
-                />
+                <span v-if="errores">
+                  <small class="text-danger"
+                    >La imagen de identidad es requerida</small
+                  >
+                </span>
+                <span v-if="!errores && correcto">
+                  <small class="text-success"
+                    >La imagen de identidad es correcta</small
+                  >
+                </span>
+                <div class="col-12">
+                  <label for="factura-pago" class="form-label"
+                    >Factura de pago
+                    <small class="text-muted"
+                      >(Con un mínimo de 2000 €)</small
+                    ></label
+                  >
+                  <input
+                    type="file"
+                    accept="image/png, image/jpg, image/jpeg"
+                    class="form-control"
+                    :ref="3"
+                    id="factura-pago"
+                    @change="obtenerImagen(3)"
+                    required
+                  />
+                    <span v-if="errores">
+                      <small class="text-danger"
+                        >La imagen de factura de pago es requerida</small
+                      >
+                    </span>
+                    <span v-if="!errores && correcto">
+                      <small class="text-success"
+                        >La imagen de factura de pago es correcta</small
+                      >
+                    </span>
+                </div>
+                <div class="col-12">
+                  <label for="factura-medico" class="form-label"
+                    >Factura seguro médico
+                    <span class="text-muted"
+                      >(Con un monto de 500 €)</span
+                    ></label
+                  >
+                  <input
+                    type="file"
+                    accept="image/png, image/jpg, image/jpeg"
+                    class="form-control"
+                    id="factura-medico"
+                    :ref="4"
+                    @change="obtenerImagen(4)"
+                    required
+                  />
+                    <span v-if="errores">
+                      <small class="text-danger"
+                        >La imagen de factura de seguro médico es
+                        requerida</small
+                      >
+                    </span>
+                    <span v-if="!errores && correcto">
+                      <small class="text-success"
+                        >La imagen de factura de seguro médico es
+                        correcta</small
+                      >
+                    </span>
+                </div>
               </div>
             </div>
             <hr class="my-4" />
-            <button class="w-100 btn btn-primary btn-lg" type="submit">
+            <button
+              @click="enviarSolicitud"
+              class="w-100 btn btn-primary btn-lg"
+            >
               Enviar solicitud <i class="fas fa-paper-plane"></i>
             </button>
           </form>
@@ -200,13 +308,20 @@
 
 <script>
 import Footer from "../components/Footer.vue";
+import AlertaErrores from "../components/AlertaErrores.vue";
 export default {
   name: "VisaTurista",
   components: {
     Footer,
+    AlertaErrores,
   },
   data() {
     return {
+      errores: false,
+      correcto: false,
+      errorIdentificacion: false,
+      errorEdad: false,
+      erroresFormulario: [],
       visaTurista: {
         nombre: "",
         apellido: "",
@@ -235,6 +350,52 @@ export default {
         });
     },
     async enviarSolicitud() {
+      this.erroresFormulario = [];
+      if (
+        this.visaTurista.nombre == "" ||
+        (!this.visaTurista.nombre && !this.erroresFormulario.includes("nombre"))
+      ) {
+        this.erroresFormulario.push("El nombre es requerido");
+      }
+      if (
+        this.visaTurista.apellido == "" ||
+        (!this.visaTurista.apellido &&
+          !this.erroresFormulario.includes("apellido"))
+      ) {
+        this.erroresFormulario.push("El apellido es requerido");
+      }
+      if (
+        this.visaTurista.identificacion == "" ||
+        (!this.visaTurista.identificacion &&
+          !this.erroresFormulario.includes("identificacion"))
+      ) {
+        this.erroresFormulario.push("La identificación es requerida");
+      }
+      if (
+        this.visaTurista.sexo == "" ||
+        (!this.visaTurista.sexo && !this.erroresFormulario.includes("sexo"))
+      ) {
+        this.erroresFormulario.push("El sexo es requerido");
+      }
+      if (
+        this.visaTurista.edad == "" ||
+        (!this.visaTurista.edad && !this.erroresFormulario.includes("edad"))
+      ) {
+        this.erroresFormulario.push("La edad es requerida");
+      }
+      if (
+        this.visaTurista.fecha_nacimiento == "" ||
+        (!this.visaTurista.fecha_nacimiento &&
+          !this.erroresFormulario.includes("fecha"))
+      ) {
+        this.erroresFormulario.push("La fecha de nacimiento es requerida");
+      }
+      if (
+        this.visaTurista.archivos.length < 4 &&
+        !this.erroresFormulario.includes("imagenes")
+      ) {
+        this.erroresFormulario.push("Las imagenes adjuntar son requeridas");
+      }
       if (
         this.visaTurista.nombre == "" ||
         this.visaTurista.apellido == "" ||
@@ -248,24 +409,30 @@ export default {
           icono: "error",
           mensaje: "Todos los campos son obligatorios.",
         });
+        this.errores = true;
         return;
       }
+      this.errores = false;
       let identficacion = this.visaTurista.identificacion;
       identficacion = identficacion.toString();
       if (identficacion.length != 8) {
+        this.errorIdentificacion = true;
         this.$store.dispatch("mostrarAlerta", {
           icono: "error",
           mensaje: "La identificación debe tener 8 dígitos.",
         });
         return;
       }
+      this.errorIdentificacion = false;
       if (this.visaTurista.edad < 10 || this.visaTurista.edad > 100) {
+        this.errorEdad = true;
         this.$store.dispatch("mostrarAlerta", {
           icono: "error",
           mensaje: "La edad debe estar entre 10 y 100 años.",
         });
         return;
       }
+      this.errorEdad = false;
       if (this.visaTurista.fecha_nacimiento > "2010-01-31") {
         this.$store.dispatch("mostrarAlerta", {
           icono: "error",
@@ -273,11 +440,14 @@ export default {
         });
         return;
       }
-      const visasPendientes = await this.axios.get("/visas-pendiente");
-      if (visasPendientes.tieneVisasPendiente) {
+      if (!this.errores && !this.errorEdad && !this.errorIdentificacion) {
+        this.correcto = true;
+      }
+      const { data } = await this.axios.get("/verificar-creacion-visas");
+      if (data.tieneVisasPendiente) {
         this.$store.dispatch("mostrarAlerta", {
           icono: "error",
-          mensaje: "Ya tienes solicitud pendiente.",
+          mensaje: "Ya tienes solicitudes pendiente.",
         });
         this.visaTurista = {
           nombre: "",
@@ -291,7 +461,7 @@ export default {
         };
         this.imagenes = {};
         setTimeout(() => {
-        this.$router.push("/solicitudes-pendiente");
+          this.$router.push("/solicitudes-pendiente");
         }, 2000);
         return;
       }
@@ -351,3 +521,8 @@ export default {
   },
 };
 </script>
+<style>
+.none-list {
+  list-style: none;
+}
+</style>
