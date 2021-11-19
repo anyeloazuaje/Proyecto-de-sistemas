@@ -17,7 +17,7 @@ const autenticacionAdmin = async (req, res, next) => {
     const datosToken = decodificarToken(tokenHeaderAdmin);
     if (!datosToken.admin)
       return res.status(403).json({ msg: 'No eres administrador.' });
-    const usuarioAdmin = await Usuarios.findById(datosToken.id);
+    const usuarioAdmin = await Usuarios.findOne({ id: datosToken.id });
     if (!usuarioAdmin)
       return res.status(404).json({ msg: 'Este usuario no existe.' });
     const adminAutenticando = {
