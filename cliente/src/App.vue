@@ -26,8 +26,8 @@ export default {
 <style>
 .bg {
   background: #8e2de2;
-  background: -webkit-linear-gradient(to right, #4a00e0, #8e2de2);
-  background: linear-gradient(to right, #4a00e0, #8e2de2);
+  background: -webkit-linear-gradient(to right, #4a00e0, #084298);
+  background: linear-gradient(to right, #084298, #4881d6);
   min-height: 100vh;
 }
 </style>

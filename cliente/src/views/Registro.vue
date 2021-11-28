@@ -128,7 +128,6 @@ export default {
   width: 250px;
   outline: none;
   color: white;
-  border-radius: 24px;
   transition: 0.25s;
 }
 
@@ -154,7 +153,6 @@ export default {
   padding: 14px 40px;
   outline: none;
   color: white;
-  border-radius: 24px;
   transition: 0.25s;
   cursor: pointer;
 }

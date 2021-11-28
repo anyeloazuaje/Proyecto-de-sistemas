@@ -18,7 +18,7 @@
               <div class="card-body text-center">
                 <p class="text-capitalize">
                   <i class="fas fa-user"></i> Cliente:
-                  <b>{{ solicitudes.clienteId.nombre }} </b>
+                  <b>{{ solicitudes.clienteId && solicitudes.clienteId.nombre }} </b>
                 </p>
                 <p>
                   <i class="fas fa-calendar-alt"></i> Fecha de la solicitud:

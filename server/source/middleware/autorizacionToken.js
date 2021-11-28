@@ -15,9 +15,9 @@ const autenticacionAdmin = async (req, res, next) => {
   tokenHeaderAdmin = obtenerToken(tokenHeaderAdmin);
   try {
     const datosToken = decodificarToken(tokenHeaderAdmin);
-    if (!datosToken.admin)
+    if (!datosToken.esUsuarioAdminisitrador)
       return res.status(403).json({ msg: 'No eres administrador.' });
-    const usuarioAdmin = await Usuarios.findById(datosToken.id);
+    const usuarioAdmin = await Usuarios.findOne({ id: datosToken.id });
     if (!usuarioAdmin)
       return res.status(404).json({ msg: 'Este usuario no existe.' });
     const adminAutenticando = {
@@ -27,6 +27,25 @@ const autenticacionAdmin = async (req, res, next) => {
     req.usuario = adminAutenticando;
     next();
   } catch (error) {
+    res.status(403).json({ msg: 'El token es invalido.' });
+  }
+};
+const esAdminPrincipal = async (req, res, next) => {
+  let tokenHeaderAdmin = req.headers['authorization'];
+  if (!tokenHeaderAdmin) {
+    return res.status(401).json({ msg: 'El token no ha sido proveído.' });
+  }
+  tokenHeaderAdmin = obtenerToken(tokenHeaderAdmin);
+  try {
+    const datosToken = decodificarToken(tokenHeaderAdmin);
+    if (!datosToken.esAdminPrincipal)
+      return res.status(403).json({ msg: 'No eres administrador.' });
+    const usuarioAdmin = await Usuarios.findOne({ id: datosToken.id });
+    if (!usuarioAdmin)
+      return res.status(404).json({ msg: 'Este usuario no existe.' });
+    next();
+  } catch (error) {
+    console.log(error);
     res.status(403).json({ msg: 'El token es invalido.' });
   }
 };
@@ -52,4 +71,5 @@ module.exports = {
   verificarToken,
   autenticacionAdmin,
   autenticacionCliente,
+  esAdminPrincipal,
 };

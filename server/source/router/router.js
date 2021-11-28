@@ -7,6 +7,7 @@ const {
   loginUsuario,
   registroUsuario,
   obtenerUsuarios,
+  eliminarUsuario,
 } = require('../controller/controller.usuario');
 const {
   crearVisaTurista,
@@ -25,13 +26,25 @@ const {
 const {
   autenticacionCliente,
   autenticacionAdmin,
+  esAdminPrincipal,
 } = require('../middleware/autorizacionToken');
 const enrutador = Router();
 const { subirArchivos } = require('../utils/subirArchivos');
 enrutador.post('/registro-cliente', registroCliente);
 enrutador.post('/login-cliente', loginCliente);
 enrutador.post('/login-usuario', loginUsuario);
-enrutador.post('/registro-usuario', autenticacionAdmin, registroUsuario);
+enrutador.post(
+  '/registro-usuario',
+  autenticacionAdmin,
+  esAdminPrincipal,
+  registroUsuario
+);
+enrutador.delete(
+  '/eliminar-usuario/:usuarioId',
+  autenticacionAdmin,
+  esAdminPrincipal,
+  eliminarUsuario
+);
 enrutador.get('/obtener-usuarios', autenticacionAdmin, obtenerUsuarios);
 
 enrutador.post(

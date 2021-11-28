@@ -21,7 +21,7 @@
       <div class="row g-5">
         <div class="col-md-5 col-lg-4 order-md-last">
           <h4 class="d-flex justify-content-between align-items-center mb-3">
-            <span class="text-info">Archivos adjuntar</span>
+            <span class="text-info">Archivos por adjuntar</span>
             <span class="badge bg-success rounded-pill">5</span>
           </h4>
           <ul class="list-group mb-3">
@@ -188,7 +188,7 @@
                   >
                 </span>
               </div>
-              <h4>Archivos adjuntar</h4>
+              <h4>Archivos por adjuntar</h4>
               <div class="col-12">
                 <label for="identidad" class="form-label"
                   >Imagen de identidad</label

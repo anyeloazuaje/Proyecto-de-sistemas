@@ -1,3 +1,4 @@
-__v,_id,clave,nombre,usuario
-0,617fdff0a68c09b3f8b18c76,$2b$10$/Nxq5TZ4mTtn.atQ4xhZ4OBjbPvUkkCWxc1hySfQWxTTj5HZjDD0a,Administrador,admin@email.com
-0,6185bff5a6dc2da14a1091fd,$2b$10$ENHQiZPYJiEv35hkblMxcOeDqE9GiQtbafNDWTFvag8GwpHKu6Zw.,angel,angel@admin.com
+__v,_id,clave,esAdmin,nombre,usuario
+0,617fdff0a68c09b3f8b18c76,$2b$10$/Nxq5TZ4mTtn.atQ4xhZ4OBjbPvUkkCWxc1hySfQWxTTj5HZjDD0a,true,Administrador,admin@email.com
+0,6185bff5a6dc2da14a1091fd,$2b$10$ENHQiZPYJiEv35hkblMxcOeDqE9GiQtbafNDWTFvag8GwpHKu6Zw.,false,angel,angel@admin.com
+0,619effa455f7a5affe65c896,$2b$10$N0k0L4C89D5L6xrkJbOHMebHM5W5IJjxcomcdbYdNI/OBS1/YVRWO,false,Anyelo,anyelo@email.com

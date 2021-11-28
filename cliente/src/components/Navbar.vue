@@ -16,7 +16,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav" id="naavbar">
           <li class="nav-item active">
             <router-link class="nav-link" to="/">
@@ -178,10 +178,10 @@ export default {
     padding-top: 0;
     padding-bottom: 0;
   }
-  @media (min-width: 700px) {
+}
+  @media (min-width: 996px) {
     #naavbar {
-      margin-left: 20em;
+      margin-left: 65%;
     }
   }
-}
 </style>

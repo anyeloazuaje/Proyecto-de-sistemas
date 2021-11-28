@@ -13,5 +13,10 @@ const usuarioSchema = new Schema({
     type: String,
     required: true,
   },
+  esAdmin: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
 });
 module.exports = model('usuario', usuarioSchema);

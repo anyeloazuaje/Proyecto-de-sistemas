@@ -18,6 +18,7 @@
                   <h4 class="card-title" v-if="usuarios.length">
                     Usuarios disponibles
                     <button
+                    v-if="tienePermisos"
                       @click="$router.push('/agregar-usuarios')"
                       class="btn btn-primary btn-sm background"
                     >
@@ -26,27 +27,26 @@
                   </h4>
                   <p class="card-description" v-if="usuarios.length">
                     <span class="text-muted">
-                      El usuarios administrador no se puede eliminar
+                      <small>El usuario administrador principal tiene acceso a eliminar y crear usuarios. </small>
                     </span>
                   </p>
                   <div class="table-responsive">
                     <table class="table" v-if="usuarios.length">
-                      <thead>
+                      <thead class="thead-dark">
                         <tr>
                           <th>Nombre</th>
                           <th>Usuario</th>
-                          <th>Acción</th>
+                          <th v-if="tienePermisos">Acción</th>
                         </tr>
                       </thead>
-                      <tbody v-for="usuario in usuarios" :key="usuario._id">
+                      <tbody v-for="usuario in usuariosAdministradores" :key="usuario._id">
                         <tr>
                           <td class="text-capitalize">{{ usuario.nombre }}</td>
                           <td>{{ usuario.usuario }}</td>
-                          <td>
+                          <td v-if="tienePermisos">
                             <button
                               class="btn btn-danger btn-sm"
                               @click="eliminarUsuario(usuario._id)"
-                              v-if="!(usuario.usuario === 'admin@email.com')"
                             >
                               Eliminar <i class="fas fa-user"></i>
                             </button>
@@ -72,6 +72,7 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
 export default {
   name: "Usuarios",
   data() {
@@ -81,6 +82,15 @@ export default {
   },
   mounted() {
     this.obtenerUsuarios();
+  },
+  computed:{
+    //Retorna todos los usuarios donde esAdmin es false
+    usuariosAdministradores(){
+      return this.usuarios.filter(usuario => usuario.esAdmin === false);
+    },
+    tienePermisos(){
+      return this.$store.state.isAdmin
+    }
   },
   methods: {
     comprobarUsuario(idUsuario) {
@@ -97,11 +107,42 @@ export default {
         });
       }
     },
+    async eliminarUsuario(idUsuario) {
+    Swal.fire({
+      title: '¿Estas seguro?',
+      text: "El usuario administrador sera eliminado!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, eliminar!',
+      cancelButtonText:'Cancelar'
+    }).then(async(result) => {
+      if (result.isConfirmed) {
+        try {
+          const { data } = await this.axios.delete(`/eliminar-usuario/${idUsuario}`);
+          this.$store.dispatch("mostrarAlerta", {
+            icono: "success",
+            mensaje: data.msg,
+          });
+          this.obtenerUsuarios();
+        } catch (error) {
+          this.$store.dispatch("mostrarAlerta", {
+            icono: "error",
+            mensaje: "Error " + error.message,
+          });
+        }
+      }
+    })
+    },
   },
 };
 </script>
 
 <style>
+.table>:not(:first-child) {
+    border-top: 2px solid #d3cfcf !important;
+}
 @media only screen and (max-width: 1000px),
   (min-device-width: 768px) and (max-device-width: 1024px) {
   table,
@@ -151,6 +192,7 @@ export default {
   }
   td:nth-of-type(3):before {
     content: "Acción";
+    margin-bottom: 3em;
   }
 }
 </style>

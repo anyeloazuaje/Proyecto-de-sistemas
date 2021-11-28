@@ -148,9 +148,7 @@ export default {
           clave: "",
           confirmar: "",
         };
-        setTimeout(function () {
           this.$router.push("/usuarios");
-        }, 2000);
       } catch (error) {
         this.$store.dispatch("mostrarAlerta", {
           icono: "error",

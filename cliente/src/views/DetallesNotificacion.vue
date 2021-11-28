@@ -90,25 +90,11 @@
                     </span>
                   </span>
                 </p>
-                <!-- <p v-if="visaNotificacion.aprobado === false">
-                  <i class="fas fa-comment"></i>
-                  <strong> Comentario: </strong>
-                  <span class="text-danger">{{
-                    visaNotificacion.comentario
-                  }}</span>
-                </p>
-                <p v-else>
-                  <i class="fas fa-comment"></i>
-                  <strong> Comentario: </strong>
-                  <span class="text-success">{{
-                    visaNotificacion.comentario
-                  }}</span>
-                </p> -->
               </div>
             </div>
             <div class="row my-2">
-              <h4 class="text-center mb-3">
-                Datos de la notificación <i class="far fa-bell"></i>
+              <h4 class="text-left  mb-3">
+                Detalles de la solicitud <i class="far fa-bell"></i>
               </h4>
               <div class="col-md-6">
                 <p>

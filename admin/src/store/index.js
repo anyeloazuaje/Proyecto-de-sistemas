@@ -11,6 +11,7 @@ export default new Vuex.Store({
     usuario: {},
     tokenAdmin: localStorage.getItem(AUTENTICACION_TOKEN_ADMIN) || '',
     isLogged: false,
+    isAdmin: false,
   },
   mutations: {
     setTokenAdmin(state, payload) {
@@ -21,6 +22,9 @@ export default new Vuex.Store({
     },
     setIslogged(state, payload) {
       state.isLogged = payload;
+    },
+    setIsAdmin(state, payload) {
+      state.isAdmin = payload;
     },
     setStore(state) {
       (state.tokenAdmin = null), (state.usuario = {});
@@ -52,7 +56,7 @@ export default new Vuex.Store({
       });
     },
     establecerDatosAdmin(context, payload) {
-      const { id, nombre } = obtenerTokenAdmin(payload);
+      const { id, nombre, esAdminPrincipal } = obtenerTokenAdmin(payload);
       const usuario = {
         id,
         nombre,
@@ -62,6 +66,7 @@ export default new Vuex.Store({
       context.commit('setTokenAdmin', payload);
       context.commit('setUsuario', usuario);
       context.commit('setIslogged', true);
+      context.commit('setIsAdmin', esAdminPrincipal);
     },
     getUsuario(context) {
       const token = localStorage.getItem(AUTENTICACION_TOKEN_ADMIN);
@@ -75,6 +80,9 @@ export default new Vuex.Store({
   getters: {
     nombreUsuario: (store) => {
       return store.usuario.nombre;
+    },
+    esAdminPrincipal: (store) => {
+      return store.isAdmin;
     },
   },
 });

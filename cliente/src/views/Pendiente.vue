@@ -10,7 +10,7 @@
       </div>
       <hr />
       <div class="page-content page-container" id="page-content">
-        <div class="padding">
+        <div class="pt-3">
           <div class="row container d-flex justify-content-center">
             <div class="grid-margin stretch-card">
               <div class="card">
@@ -19,31 +19,31 @@
                     Datos principales
                   </h4>
                   <p class="card-description" v-if="visaPendiente.length">
-                    Visas en espera
+                    Visas con estatus en espera. Cuando los administradores definan el resultado, esta sera eliminada de esta sección.
                   </p>
                   <div class="table-responsive">
                     <table class="table" v-if="visaPendiente.length">
                       <thead>
                         <tr>
-                          <th>Nombre</th>
-                          <th>Apellido</th>
-                          <th>Identificación</th>
-                          <th>Solicitada el</th>
-                          <th>Tipo Visa</th>
-                          <th>Acción</th>
+                          <th class="text-center">Nombre</th>
+                          <th class="text-center">Apellido</th>
+                          <th class="text-center">Identificación</th>
+                          <th class="text-center">Solicitada el</th>
+                          <th class="text-center">Tipo Visa</th>
+                          <th class="text-center">Acción</th>
                         </tr>
                       </thead>
                       <tbody v-for="visa in visaPendiente" :key="visa._id">
                         <tr>
-                          <td class="text-capitalize">{{ visa.nombre }}</td>
-                          <td class="text-capitalize">{{ visa.apellido }}</td>
-                          <td>{{ visa.identificacion }}</td>
-                          <td>
+                          <td class="text-center text-capitalize">{{ visa.nombre }}</td>
+                          <td class="text-center text-capitalize">{{ visa.apellido }}</td>
+                          <td class="text-center">{{ visa.identificacion }}</td>
+                          <td class="text-center">
                             {{
                               new Date(visa.fechaCreacion).toLocaleDateString()
                             }}
                           </td>
-                          <td>
+                          <td class="text-center">
                             <span
                               :class="[
                                 visa.tipoVisa === 'Turista'
@@ -58,7 +58,7 @@
                               >{{ visa.tipoVisa }}</span
                             >
                           </td>
-                          <td>
+                          <td class="text-center">
                             <button
                               class="btn btn-danger btn-sm"
                               @click="eliminarVisa(visa)"

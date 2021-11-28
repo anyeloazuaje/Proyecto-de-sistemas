@@ -17,7 +17,8 @@ module.exports = {
         const token = crearToken({
           id: usuarioAdmin._id,
           nombre: usuarioAdmin.nombre,
-          admin: true,
+          esUsuarioAdminisitrador: true,
+          esAdminPrincipal: usuarioAdmin.esAdmin,
         });
         return res
           .status(200)
@@ -75,6 +76,18 @@ module.exports = {
       res.status(500).json({
         msg: 'Ocurrió un error obteniendo los usuarios ' + error.message,
       });
+    }
+  },
+  eliminarUsuario: async (req, res) => {
+    try {
+      const { usuarioId } = req.params;
+      const usuarioEliminado = await Usuario.findByIdAndDelete(usuarioId);
+      if (!usuarioEliminado) {
+        return res.status(400).json({ msg: 'No existe el usuario.' });
+      }
+      return res.status(200).json({ msg: 'Usuario eliminado correctamente.' });
+    } catch (error) {
+      res.status(500).json({ msg: 'Ocurrió un error eliminando el usuario.' });
     }
   },
 };

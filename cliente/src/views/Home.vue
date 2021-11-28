@@ -1,29 +1,28 @@
 <template>
   <div class="container">
-  <div class="row">
+    <div class="row">
       <div class="col-md-6 mt-5">
-      <h1 class="text-center">¡Hola {{ $store.getters.nombreCliente }}!</h1>
-      <p class="lead text-center">
-        Bienvenido al sistema de solicitud de visas. Aqui podras realizar tus
-        solicitudes y verificar el estado de la misma. Ten en cuenta que solo
-        puedes manter tres solicitudes activas, luego que esta ya sea aprobada o
-        rechazada, podras realizar nuevas solicitudes.
-      </p>
-      <p class="text-muted text-center">
-        Selecciona la visa de desea solicitar, estas seran revisadas por nuestro
-        supervisores
-      </p>
+        <h1 class="text-center">¡Hola {{ $store.getters.nombreCliente }}!</h1>
+        <p class="lead text-center">
+          Bienvenido al sistema de solicitud de visas. Aqui podras realizar tus
+          solicitudes y verificar el estado de la misma. Ten en cuenta que solo
+          puedes manter tres solicitudes activas, luego que esta ya sea aprobada
+          o rechazada, podras realizar nuevas solicitudes.
+        </p>
+        <p class="text-muted text-center">
+          Selecciona la visa de desea solicitar, estas seran revisadas por
+          nuestro supervisores
+        </p>
+      </div>
+      <div class="col-md-6 mt-5">
+        <img src="/img/home.png" alt="Imagen de inicio" class="img-fluid" />
+      </div>
     </div>
-    <div class="col-md-6 mt-5">
-      <img src="/img/home.png" alt="Imagen de inicio" class="img-fluid">
-    </div>
-  </div>
     <div class="container my-5">
-      <div class="text-left">
-        <button class="btn background text-white my-3" @click="mostrarVisas = !mostrarVisas">
-          {{ mostrarVisas ? "Ocultar" : "Mostrar" }} tipos de visas
-          <i :class="mostrarVisas ? 'far fa-eye' : 'fas fa-eye-slash'"></i>
-        </button>
+      <div>
+        <h4 class="text-center text-muted">
+          Elige la visa que deseas solicitar
+        </h4>
       </div>
       <transition
         name="fade"
@@ -32,30 +31,42 @@
         enter-active-class="animated fadeIn"
         leave-active-class="animated fadeOut"
       >
-        <div class="row margin" v-if="mostrarVisas">
+        <div class="row margin">
           <div class="col-md-4">
-            <button
-              class="btn btn-primary"
-              @click="$router.push('/solicitud/visa-turista')"
-            >
-              Visa Turista <i class="fas fa-passport"></i>
-            </button>
+            <div class="card pointer" @click="$router.push('/solicitud/visa-turista')">
+              <div class="card-body">
+                  <img class="card-img-top visa-turista" src="/img/visa.svg" >
+                <h5 class="card-title">Visa Empresarial</h5>
+                <p class="card-text">
+                  Visa para personas que desean trabajar en el extranjero.
+                </p>
+                <a  class="btn btn-primary w-100">Solicitar <i class="fas fa-hand-point-up"></i> </a>
+              </div>
+            </div>
           </div>
           <div class="col-md-4">
-            <button
-              class="btn bg-empresarial text-white"
-              @click="$router.push('/solicitud/visa-empresarial')"
-            >
-              Visa Empresarial <i class="fas fa-passport"></i>
-            </button>
+              <div class="card pointer" @click="$router.push('/solicitud/visa-empresarial')">
+               <div class="card-body">
+                  <img class="card-img-top visa-empresarial" src="/img/visa.svg" >
+                <h5 class="card-title">Visa de Turista</h5>
+                <p class="card-text">
+                  Esta visa permite pasar por el pais sin restricciones.
+                </p>
+                <a  class="btn bg-empresarial text-white w-100">Solicitar <i class="fas fa-hand-point-up"></i> </a>
+              </div>
+            </div>
           </div>
           <div class="col-md-4">
-            <button
-              class="btn btn-info text-white"
-              @click="$router.push('/solicitud/visa-diplomatica')"
-            >
-              Visa Diplomatica <i class="fas fa-passport"></i>
-            </button>
+              <div class="card pointer" @click="$router.push('/solicitud/visa-diplomatica')">
+               <div class="card-body">
+                  <img class="card-img-top visa-diplomatica" src="/img/visa.svg" >
+                <h5 class="card-title">Visa Diplomatica</h5>
+                <p class="card-text">
+                   Visa para para funcionarios gubernamentales y Organizaciónes
+                </p>
+                <a  class="btn btn-info text-white w-100">Solicitar <i class="fas fa-hand-point-up"></i> </a>
+              </div>
+            </div>
           </div>
         </div>
       </transition>
@@ -67,23 +78,34 @@
 export default {
   name: "Home",
   data() {
-    return {
-      mostrarVisas: true,
-    };
+    return {};
   },
   components: {},
   methods: {},
 };
 </script>
 <style>
-.bg-empresarial{
+.bg-empresarial {
   background: #2778c4 !important;
 }
-.bg-empresarial:hover{
+.bg-empresarial:hover {
   background: #278ceb;
 }
 </style>
 <style  scoped>
+.visa-turista {
+  filter: invert(26%) sepia(100%) saturate(2345%) hue-rotate(209deg)
+    brightness(103%) contrast(97%);
+}
+.visa-empresarial {
+  filter: invert(38%) sepia(60%) saturate(914%) hue-rotate(172deg) brightness(96%) contrast(88%);
+}
+.visa-diplomatica {
+filter: invert(64%) sepia(87%) saturate(1320%) hue-rotate(147deg) brightness(94%) contrast(100%);
+}
+.pointer {
+  cursor: pointer;
+}
 .margin {
   margin-top: 5em;
   text-align: center;
